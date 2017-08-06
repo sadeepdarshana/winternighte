@@ -156,6 +156,7 @@ public class BottomBar extends LinearLayout{
             public void onEnd() {
                 getLayoutParams().height = WRAP_CONTENT;
                 requestLayout();
+                ((NotebookActivity)getContext()).refreshBottomBar();
             }
 
             @Override
