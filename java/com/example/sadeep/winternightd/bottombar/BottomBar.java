@@ -7,7 +7,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.example.sadeep.winternightd.R;
-import com.example.sadeep.winternightd.animation.OnEndCallback;
+import com.example.sadeep.winternightd.activities.NotebookActivity;
+import com.example.sadeep.winternightd.animation.XAnimationListener;
 import com.example.sadeep.winternightd.animation.XAnimation;
 import com.example.sadeep.winternightd.note.Note;
 
@@ -41,7 +42,7 @@ public class BottomBar extends LinearLayout{
 
         setOrientation(VERTICAL);
 
-        LayoutInflater.from(context).inflate(R.layout.bottombar_combined,this,true);
+        LayoutInflater.from(context).inflate(R.layout.bottombar,this,true);
 
         extendedToolbar = new ExtendedToolbar(context,false,false, false){
 
@@ -130,8 +131,6 @@ public class BottomBar extends LinearLayout{
 
     public void setToolbarVisibility(boolean visible){
         extendedToolbar.setToolbarVisibility(visible,true);
-        if(visible)extendedToolbar.setBackgroundColor(0xccebebeb);
-        else extendedToolbar.setBackgroundColor(0);
     }
     public void setGlassModeEnabled(boolean visible){
         newNoteBar.setGlassModeEnabled(visible,true);
@@ -139,6 +138,9 @@ public class BottomBar extends LinearLayout{
 
 
     private Animator currentAnimation;
+
+
+
     public void hide(){
         if(currentAnimation!=null && currentAnimation.isRunning())currentAnimation.cancel();
         if(getLayoutParams().height==WRAP_CONTENT)storedHeight=getHeight();
@@ -147,11 +149,17 @@ public class BottomBar extends LinearLayout{
 
     public void show(){
         if(currentAnimation!=null && currentAnimation.isRunning())currentAnimation.cancel();
-        currentAnimation = XAnimation.changeDimension(this, ANIMATION_DURATION, XAnimation.DIMENSION_HEIGHT, 0, storedHeight, new OnEndCallback() {
+
+        ((NotebookActivity)getContext()).newNoteBottomBar.setGlassModeEnabled(true);
+        currentAnimation = XAnimation.changeDimension(this, ANIMATION_DURATION, XAnimation.DIMENSION_HEIGHT, 0, storedHeight, new XAnimationListener() {
             @Override
             public void onEnd() {
                 getLayoutParams().height = WRAP_CONTENT;
                 requestLayout();
+            }
+
+            @Override
+            public void onStep() {
             }
         });
 

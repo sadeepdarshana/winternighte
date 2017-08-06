@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.sadeep.winternightd.R;
+import com.example.sadeep.winternightd.animation.XAnimationListener;
 import com.example.sadeep.winternightd.animation.XAnimation;
 import com.example.sadeep.winternightd.misc.Utils;
 import com.example.sadeep.winternightd.toolbar.Toolbar;
@@ -27,6 +28,7 @@ public class ExtendedToolbar extends LinearLayout{
     private boolean buttonVisibility = true;
     private boolean toolbarVisibility = true;
 
+    public XAnimationListener toolbarAnimationListener = null;
 
 
     public ExtendedToolbar(Context context, boolean buttonVisibility, boolean toolbarVisibility, boolean cancelButton) {
@@ -136,7 +138,17 @@ public class ExtendedToolbar extends LinearLayout{
 
         if(animate) {
             if(visible) {
-                XAnimation.changeDimension(toolbar, ANIMATION_DURATION, XAnimation.DIMENSION_HEIGHT, 0, toolbarHeight);
+                XAnimation.changeDimension(toolbar, ANIMATION_DURATION, XAnimation.DIMENSION_HEIGHT, 0, toolbarHeight, new XAnimationListener() {
+                    @Override
+                    public void onEnd() {
+                        if(toolbarAnimationListener!=null)toolbarAnimationListener.onEnd();
+                    }
+
+                    @Override
+                    public void onStep(){
+                        if(toolbarAnimationListener!=null)toolbarAnimationListener.onStep();
+                    }
+                });
             }else {
                 XAnimation.changeDimension(toolbar, ANIMATION_DURATION, XAnimation.DIMENSION_HEIGHT, toolbarHeight, 0);
             }

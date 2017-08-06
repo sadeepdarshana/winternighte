@@ -10,6 +10,7 @@ import android.text.Layout;
 import android.text.Spanned;
 import android.widget.TextView;
 
+import com.example.sadeep.winternightd.activities.NoteContainingActivity;
 import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.dumping.FieldDataStream;
 import com.example.sadeep.winternightd.field.FieldFactory;
@@ -171,7 +172,7 @@ public class SimpleIndentedField extends IndentedField implements SingleText {
             public void run() {
                 newfield.setIndent(SimpleIndentedField.this.getIndent());
                 getNote().removeView(SimpleIndentedField.this);
-                NoteContainingActivityRootView.resumeLayout();
+                ((NoteContainingActivity)getContext()).getRootView().resumeLayout();
             }
         });
 

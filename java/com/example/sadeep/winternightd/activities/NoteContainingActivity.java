@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.sadeep.winternightd.R;
+import com.example.sadeep.winternightd.misc.NoteContainingActivityRootView;
 import com.example.sadeep.winternightd.note.Note;
 import com.example.sadeep.winternightd.selection.XSelection;
 
@@ -76,10 +77,12 @@ public abstract class NoteContainingActivity extends AppCompatActivity {
     }
 
 
+
     public void onRootLayoutSizeChanged(){}
 
     protected abstract void onMenuItemPressed(int menuItem);
     protected abstract Drawable getActionBarDrawable();
     protected abstract String getActionBarTitle();
+    public abstract NoteContainingActivityRootView getRootView();
 
 }

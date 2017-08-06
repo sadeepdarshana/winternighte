@@ -18,6 +18,8 @@ public class NoteContainingActivityRootView extends RelativeLayout {
     private static boolean layoutEnabled = true;
     public static NoteContainingActivityRootView This = null;
 
+    public KeyboardListener keyboardListener = null;
+
     public View bottomLeftMarker;
     public NoteContainingActivityRootView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -44,23 +46,27 @@ public class NoteContainingActivityRootView extends RelativeLayout {
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         This=this;
+
         if(layoutEnabled)super.onLayout(changed, l, t, r, b);
-        d.p(t,b);
     }
     int x,y;
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if(y-heightMeasureSpec>Globals.dp2px*130 && y!=0 && heightMeasureSpec !=0){
+            if(keyboardListener!=null)keyboardListener.beforeKeyboardOpen();
+        }
+
         if(layoutEnabled){
             x=widthMeasureSpec;
             y=heightMeasureSpec;
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
         else super.onMeasure(x, y);
+
     }
 
 
-
-    public static void resumeLayout() {
+    public void resumeLayout() {
         layoutEnabled =true;
         if(This!=null)This.requestLayout();
 
@@ -68,5 +74,9 @@ public class NoteContainingActivityRootView extends RelativeLayout {
 
     public static void pauseLayout(){
         layoutEnabled = false;
+    }
+
+    public interface KeyboardListener {
+        void beforeKeyboardOpen();
     }
 }

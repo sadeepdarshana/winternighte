@@ -11,7 +11,6 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.HorizontalScrollView;
 
 import com.example.sadeep.winternightd.misc.Utils;
-import com.example.sadeep.winternightd.temp.d;
 
 /**
  * Created by Sadeep on 6/18/2017.
@@ -77,11 +76,11 @@ public class XAnimation {
         return changeDimension(view, duration, dimension, start, end,delay,null);
     }
 
-    public static ValueAnimator changeDimension(final View view, int duration, final int dimension, int start, int end, final OnEndCallback onEndCallback){
-        return changeDimension(view, duration, dimension, start, end,0,onEndCallback);
+    public static ValueAnimator changeDimension(final View view, int duration, final int dimension, int start, int end, final XAnimationListener XAnimationListener){
+        return changeDimension(view, duration, dimension, start, end,0, XAnimationListener);
     }
 
-    public static ValueAnimator changeDimension(final View view, int duration, final int dimension, int start, int end, int delay, final OnEndCallback onEndCallback){
+    public static ValueAnimator changeDimension(final View view, int duration, final int dimension, int start, int end, int delay, final XAnimationListener xAnimationListener){
 
         final ValueAnimator valueAnimator;
         if(dimension==0)valueAnimator = ValueAnimator.ofInt(start,end).setDuration(duration);
@@ -94,6 +93,7 @@ public class XAnimation {
                 if(dimension==0)view.getLayoutParams().width = value.intValue();
                 else if(dimension==1)view.getLayoutParams().height = value.intValue();
                 view.requestLayout();
+                if(xAnimationListener!=null)xAnimationListener.onStep();
             }
         });
 
@@ -109,7 +109,7 @@ public class XAnimation {
             @Override
             public void onAnimationEnd(Animator animation) {
                 if(canceled)return;
-                if(onEndCallback!=null)onEndCallback.onEnd();
+                if(xAnimationListener !=null) xAnimationListener.onEnd();
             }
 
             @Override

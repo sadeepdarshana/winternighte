@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 
 import com.example.sadeep.winternightd.R;
 import com.example.sadeep.winternightd.animation.XAnimation;
+import com.example.sadeep.winternightd.animation.XAnimationListener;
 import com.example.sadeep.winternightd.attachbox.AttachBoxManager;
 import com.example.sadeep.winternightd.attachbox.OnAttachBoxItemClick;
 import com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxOpener;
@@ -23,6 +24,7 @@ import com.example.sadeep.winternightd.notebook.Notebook;
 import com.example.sadeep.winternightd.bottombar.BottomBar;
 import com.example.sadeep.winternightd.selection.XSelection;
 import com.example.sadeep.winternightd.misc.NoteContainingActivityRootView;
+import com.example.sadeep.winternightd.temp.d;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -70,7 +72,7 @@ public class NotebookActivity extends NoteContainingActivity {
 
         bottombarSpace = (LinearLayout) findViewById(R.id.bottombar_space);
         notebookSpace = (LinearLayout) findViewById(R.id.notebook_space);
-        rootView = (NoteContainingActivityRootView)notebookSpace.getParent();
+        rootView = (NoteContainingActivityRootView)findViewById(R.id.rootView);
 
         Globals.initialize(this);
         DataConnection.initialize(this);
@@ -114,42 +116,37 @@ public class NotebookActivity extends NoteContainingActivity {
         //getWindow().setBackgroundDrawableResource(R.drawable.yyy);
         setActionBarMode(NoteContainingActivity.ACTIONBAR_NORMAL);
 
-        Utils.setKeyboardVisibilityListener(this,new Utils.KeyboardVisibilityListener() {
+        final int[] notebookFirstCompletelyVisibleItemPosition = {0};//'int[1]' because java syntax doesn't allow 'int' here
+        rootView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
-            public void onKeyboardVisibilityChanged(boolean keyboardVisible,final int size) {
-                if(!keyboardVisible)return;
-
-                int index = notebook.layoutManager.findFirstVisibleItemPosition();
-                if(index<=3 && notebook.editor.getActiveNote()==null) {
-                    notebook.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            notebook.scrollToPosition(0);
-                        }
-                    }, 400);
-                    notebook.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            notebook.scrollToPosition(0);
-                        }
-                    }, 250);
-                    notebook.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            notebook.scrollToPosition(0);
-                        }
-                    }, 100);
-                }
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                notebookFirstCompletelyVisibleItemPosition[0] = notebook.layoutManager.findFirstCompletelyVisibleItemPosition();
             }
         });
+        rootView.keyboardListener = new NoteContainingActivityRootView.KeyboardListener() {
+            @Override
+            public void beforeKeyboardOpen() {
+                if(notebookFirstCompletelyVisibleItemPosition[0]==0&& notebook.editor.getActiveNote()==null){
+                    newNoteBottomBar.extendedToolbar.toolbarAnimationListener = new XAnimationListener() {
+                        @Override
+                        public void onEnd() {
+                            newNoteBottomBar.extendedToolbar.toolbarAnimationListener=null;
+                        }
+
+                        @Override
+                        public void onStep() {
+                            notebook.scrollToPosition(0);
+                        }
+                    };
+                }
+            }
+        };
     }
 
     public void refreshBottomBar(){
         if(notebook.editor.getActiveNote()==null){
             if(!newNoteBottomBar.layoutShown) {
                 newNoteBottomBar.show();
-                if(((LinearLayoutManager)notebook.getLayoutManager()).findFirstCompletelyVisibleItemPosition()<=1)
-                    XAnimation.vScroll(notebook,300,newNoteBottomBar.storedHeight);
                 newNoteBottomBar.layoutShown=true;
                 disableBottomBarGlassModeIfNecessary();
                 enableBottomBarToGlassModeIfNecessary();
@@ -157,7 +154,7 @@ public class NotebookActivity extends NoteContainingActivity {
         }else {
             if(newNoteBottomBar.layoutShown) {
                 newNoteBottomBar.layoutShown=false;
-                newNoteBottomBar.storedHeight=newNoteBottomBar.getHeight();
+
                 newNoteBottomBar.hide();
             }
         }
@@ -190,9 +187,15 @@ public class NotebookActivity extends NoteContainingActivity {
     }
 
     @Override
+    public NoteContainingActivityRootView getRootView() {
+        return rootView;
+    }
+
+    @Override
     public void onRootLayoutSizeChanged() {
         AttachBoxManager.tryDismiss();
     }
+
 
 
     public void sendClick(View view){
@@ -209,10 +212,10 @@ public class NotebookActivity extends NoteContainingActivity {
         newNote.convertToNewNoteWithOneDefaultField();
         ((SimpleIndentedField) newNote.getFieldAt(0)).getMainTextBox().requestFocus();
 
-        NoteContainingActivityRootView.This.postDelayed(new Runnable() {
+        rootView.postDelayed(new Runnable() {
             @Override
             public void run() {
-                NoteContainingActivityRootView.resumeLayout();
+                rootView.resumeLayout();
             }
         },300);
     }
