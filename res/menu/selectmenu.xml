@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- "Mark Favorite", should appear as action button if possible -->
+    <item
+        android:id="@+id/action_cut"
+        android:icon="@drawable/ic_content_cut_white_24dp"
+        android:title="cut"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_copy"
+        android:icon="@drawable/ic_content_copy_white_24dp"
+        android:title="copy"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/action_paste"
+        android:icon="@drawable/ic_content_paste_white_24dp"
+        android:title="paste"
+        app:showAsAction="ifRoom"/>
+
+
+</menu>

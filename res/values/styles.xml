@@ -1,0 +1,19 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="notebook_activity_theme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
+        <!-- because we need to but cannot simply hide the built-in cursor handle we make it a 1x1 png-->
+        <item name="android:textSelectHandleLeft">@drawable/px1</item>
+        <item name="android:textSelectHandleRight">@drawable/px1</item>
+    </style>
+
+
+
+
+
+</resources>

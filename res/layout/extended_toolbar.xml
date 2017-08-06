@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:layout_margin="0dp"
+
+    android:clipChildren="false"
+
+    >
+
+    <com.example.sadeep.winternightd.buttons.customizedbuttons.AttachCircularButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_attach_file_white_24dp"
+
+
+        android:padding="0dp"
+
+        android:id="@+id/attach"
+        app:fabSize="mini"
+        app:elevation="3dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="4dp" />
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="bottom"
+        android:id="@+id/toolbarcontainer"
+
+        android:layout_margin="0dp"
+        android:padding="0dp"
+        android:clipChildren="false"
+        />
+
+    <com.example.sadeep.winternightd.buttons.customizedbuttons.CancelCircularButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_clear_white_24dp"
+
+
+        android:padding="0dp"
+
+        android:id="@+id/cancel"
+        app:fabSize="mini"
+        app:elevation="3dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginRight="4dp"
+        android:visibility="gone"/>
+
+    <com.example.sadeep.winternightd.buttons.customizedbuttons.SaveNoteCircularButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_send_white_18dp"
+
+
+        android:padding="0dp"
+
+        android:id="@+id/send"
+        app:fabSize="mini"
+        android:layout_gravity="center_vertical"
+        app:elevation="3dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginRight="4dp"/>
+
+
+</merge>
