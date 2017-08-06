@@ -26,7 +26,7 @@ public class d {
     public static void p(Object ... objects){
         String x="";
         for (Object object:objects) {
-            x+=object.toString();
+            x+=object.toString()+" ";
         }
         Log.i("mylog",x);
     }

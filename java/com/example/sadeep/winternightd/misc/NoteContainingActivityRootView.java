@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.example.sadeep.winternightd.activities.NoteContainingActivity;
+import com.example.sadeep.winternightd.temp.d;
 
 /**
  * Created by Sadeep on 6/22/2017.
@@ -44,6 +45,7 @@ public class NoteContainingActivityRootView extends RelativeLayout {
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         This=this;
         if(layoutEnabled)super.onLayout(changed, l, t, r, b);
+        d.p(t,b);
     }
     int x,y;
     @Override

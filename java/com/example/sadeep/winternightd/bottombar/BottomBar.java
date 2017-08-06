@@ -1,12 +1,17 @@
 package com.example.sadeep.winternightd.bottombar;
 
+import android.animation.Animator;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.example.sadeep.winternightd.R;
+import com.example.sadeep.winternightd.animation.OnEndCallback;
+import com.example.sadeep.winternightd.animation.XAnimation;
 import com.example.sadeep.winternightd.note.Note;
+
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * Created by Sadeep on 7/10/2017.
@@ -26,6 +31,7 @@ public class BottomBar extends LinearLayout{
     public static final int MODE_EXPANDED = 1;
 
     public int storedHeight=-1;
+    public static final int ANIMATION_DURATION =400;
 
     public boolean layoutShown=true;
 
@@ -129,5 +135,25 @@ public class BottomBar extends LinearLayout{
     }
     public void setGlassModeEnabled(boolean visible){
         newNoteBar.setGlassModeEnabled(visible,true);
+    }
+
+
+    private Animator currentAnimation;
+    public void hide(){
+        if(currentAnimation!=null && currentAnimation.isRunning())currentAnimation.cancel();
+        if(getLayoutParams().height==WRAP_CONTENT)storedHeight=getHeight();
+        currentAnimation = XAnimation.changeDimension(this,ANIMATION_DURATION,XAnimation.DIMENSION_HEIGHT,storedHeight,0);
+    }
+
+    public void show(){
+        if(currentAnimation!=null && currentAnimation.isRunning())currentAnimation.cancel();
+        currentAnimation = XAnimation.changeDimension(this, ANIMATION_DURATION, XAnimation.DIMENSION_HEIGHT, 0, storedHeight, new OnEndCallback() {
+            @Override
+            public void onEnd() {
+                getLayoutParams().height = WRAP_CONTENT;
+                requestLayout();
+            }
+        });
+
     }
 }

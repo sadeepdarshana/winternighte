@@ -1,5 +1,6 @@
 package com.example.sadeep.winternightd.animation;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
@@ -10,6 +11,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.HorizontalScrollView;
 
 import com.example.sadeep.winternightd.misc.Utils;
+import com.example.sadeep.winternightd.temp.d;
 
 /**
  * Created by Sadeep on 6/18/2017.
@@ -68,36 +70,67 @@ public class XAnimation {
 
 
 
-    public static void changeDimension(final View view, int duration, final int dimension, int start, int end){
-        changeDimension(view, duration, dimension, start, end,0);
+    public static ValueAnimator changeDimension(final View view, int duration, final int dimension, int start, int end){
+        return changeDimension(view, duration, dimension, start, end,0);
+    }
+    public static ValueAnimator changeDimension(final View view, int duration, final int dimension, int start, int end,int delay){
+        return changeDimension(view, duration, dimension, start, end,delay,null);
     }
 
-    public static void changeDimension(final View view, int duration, final int dimension, int start, int end,int delay){
-        changeDimension(view, duration, dimension, start, end,delay,null);
+    public static ValueAnimator changeDimension(final View view, int duration, final int dimension, int start, int end, final OnEndCallback onEndCallback){
+        return changeDimension(view, duration, dimension, start, end,0,onEndCallback);
     }
 
-    public static void changeDimension(final View view, int duration, final int dimension, int start, int end, int delay, final ViewGroup parent){
+    public static ValueAnimator changeDimension(final View view, int duration, final int dimension, int start, int end, int delay, final OnEndCallback onEndCallback){
 
-        ValueAnimator slideAnimator;
-        if(dimension==0)slideAnimator = ValueAnimator.ofInt(start,end).setDuration(duration);
-        else slideAnimator = ValueAnimator.ofInt(start,end).setDuration(duration);
+        final ValueAnimator valueAnimator;
+        if(dimension==0)valueAnimator = ValueAnimator.ofInt(start,end).setDuration(duration);
+        else valueAnimator = ValueAnimator.ofInt(start,end).setDuration(duration);
 
-        slideAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                if(parent!=null && view.getParent()==null)parent.addView(view);
-
                 Integer value = (Integer) animation.getAnimatedValue();
                 if(dimension==0)view.getLayoutParams().width = value.intValue();
                 else if(dimension==1)view.getLayoutParams().height = value.intValue();
                 view.requestLayout();
             }
         });
+
+
+
+        valueAnimator.addListener(new Animator.AnimatorListener() {
+            private boolean canceled = false;
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if(canceled)return;
+                if(onEndCallback!=null)onEndCallback.onEnd();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+                canceled=true;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+
+
         AnimatorSet set = new AnimatorSet();
-        set.play(slideAnimator);
+        set.play(valueAnimator);
         set.setInterpolator(new AccelerateDecelerateInterpolator());
         set.setStartDelay(delay);
         set.start();
+
+        return valueAnimator;
     }
 
 
@@ -149,7 +182,7 @@ public class XAnimation {
         if(view.getParent()!=null)((ViewGroup)view.getParent()).removeView(view);
         parent.addView(view,indexInParent);
 
-        changeDimension(view,duration,dimension,0,end,delay,parent);
+        changeDimension(view,duration,dimension,0,end,delay);
 
         if(endParam!=0)view.postDelayed(new Runnable() {
             @Override

@@ -140,10 +140,6 @@ public class NotebookActivity extends NoteContainingActivity {
                         }
                     }, 100);
                 }
-
-                newNoteBottomBar.getLayoutParams().height=WRAP_CONTENT;
-                newNoteBottomBar.getLayoutParams().width=MATCH_PARENT;
-                newNoteBottomBar.requestLayout();
             }
         });
     }
@@ -151,7 +147,7 @@ public class NotebookActivity extends NoteContainingActivity {
     public void refreshBottomBar(){
         if(notebook.editor.getActiveNote()==null){
             if(!newNoteBottomBar.layoutShown) {
-                XAnimation.addAndExpand(newNoteBottomBar,bottombarSpace,0,300,XAnimation.DIMENSION_HEIGHT,0,newNoteBottomBar.storedHeight,WRAP_CONTENT);
+                newNoteBottomBar.show();
                 if(((LinearLayoutManager)notebook.getLayoutManager()).findFirstCompletelyVisibleItemPosition()<=1)
                     XAnimation.vScroll(notebook,300,newNoteBottomBar.storedHeight);
                 newNoteBottomBar.layoutShown=true;
@@ -162,7 +158,7 @@ public class NotebookActivity extends NoteContainingActivity {
             if(newNoteBottomBar.layoutShown) {
                 newNoteBottomBar.layoutShown=false;
                 newNoteBottomBar.storedHeight=newNoteBottomBar.getHeight();
-                XAnimation.squeezeAndRemove(newNoteBottomBar,300,XAnimation.DIMENSION_HEIGHT,0);
+                newNoteBottomBar.hide();
             }
         }
     }
