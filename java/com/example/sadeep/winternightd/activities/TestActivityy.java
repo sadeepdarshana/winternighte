@@ -25,7 +25,7 @@ public class TestActivityy extends AppCompatActivity {
         setContentView(i);
         //LayoutInflater.from(this).inflate(R.layout.test,i,true);
 
-        getWindow().setBackgroundDrawableResource(R.drawable.yyy);
+        //getWindow().setBackgroundDrawableResource(R.drawable.yyy);
     }
 
     private void Click(View v) {
