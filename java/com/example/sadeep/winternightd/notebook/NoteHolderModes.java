@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.sadeep.winternightd.activities.NoteContainingActivity;
 import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.attachbox.AttachBoxManager;
 import com.example.sadeep.winternightd.attachbox.OnAttachBoxItemClick;
@@ -23,7 +23,8 @@ import com.example.sadeep.winternightd.misc.NotebookItemChamber;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 
-import static com.example.sadeep.winternightd.notebook.NotebookViewHolderUtils.NoteHolder.*;
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * Created by Sadeep on 7/24/2017.
@@ -43,9 +44,10 @@ public class NoteHolderModes {
             if(noteHolder.getNote()!=null)noteHolder.getNote().setEditable(false);
             noteHolder.noteEditable = false;
 
+            ViewLower viewLower = new ViewLower(noteHolder.getContext());
             ViewUpper viewUpper = new ViewUpper(noteHolder.getContext());
             noteHolder.getUpperChamber().setChamberContent(viewUpper,animate);
-            noteHolder.getLowerChamber().emptyChamber(animate);
+            noteHolder.getLowerChamber().setChamberContent(viewLower,animate);
 
             noteHolder.setRadius(Globals.dp2px*4);
 
@@ -71,12 +73,12 @@ public class NoteHolderModes {
 
             noteHolder.mode = MODE_VIEW;
 
-            if(noteHolder.getNote()!=null)viewUpper.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
+            if(noteHolder.getNote()!=null) viewLower.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
         }
 
         public static void onBind(NotebookViewHolderUtils.NoteHolder noteHolder) {
-            ViewUpper viewUpper = (ViewUpper) noteHolder.getUpperChamber().getChamberContent();
-            viewUpper.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
+            ViewLower viewLower = (ViewLower) noteHolder.getLowerChamber().getChamberContent();
+            viewLower.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
         }
 
         public static void setAsActiveNote(NotebookViewHolderUtils.NoteHolder noteHolder) {
@@ -85,7 +87,7 @@ public class NoteHolderModes {
             noteHolder.getNotebook().notebookActivity.refreshBottomBar();
         }
 
-        public static class ViewUpper extends FrameLayout{
+        public static class ViewLower extends FrameLayout{
             private long dateTime;
             private TextView dateTimeTextView;
 
@@ -94,13 +96,18 @@ public class NoteHolderModes {
                 updateDateTimeTextView();
             }
 
-            public ViewUpper(Context context) {
+            public ViewLower(Context context) {
                 super(context);
+                setLayoutParams(new NotebookItemChamber.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+
                 dateTimeTextView = new TextView(context);
-                dateTimeTextView.setTextColor(0xff228822);
-                dateTimeTextView.setBackgroundColor(Color.TRANSPARENT);
+                dateTimeTextView.setTextColor(0xff999999);
                 dateTimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_FRACTION,  Globals.defaultFontSize*.67f);
-                setBackgroundColor(Color.TRANSPARENT);
+
+                LayoutParams params=new LayoutParams(WRAP_CONTENT,WRAP_CONTENT);
+                params.gravity = Gravity.RIGHT;
+                dateTimeTextView.setLayoutParams(params);
+
                 addView(dateTimeTextView);
                 updateDateTimeTextView();
 
@@ -114,6 +121,14 @@ public class NoteHolderModes {
                 dateTimeTextView.setText(dateFormat.format(dateTime));
                 //todo omit year if same year etc + today,yesterday,6mins ago
             }
+        }
+        public static class ViewUpper extends FrameLayout{
+            public ViewUpper(Context context) {
+                super(context);
+                setLayoutParams(new NotebookItemChamber.LayoutParams(MATCH_PARENT, 10*Globals.dp2px));
+
+            }
+
         }
     }
     public static class ModeEdit{
@@ -140,7 +155,7 @@ public class NoteHolderModes {
 
             public EditUpper(Context context) {
                 super(context);
-                NotebookItemChamber.LayoutParams params = new NotebookItemChamber.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Globals.dp2px*25);
+                NotebookItemChamber.LayoutParams params = new NotebookItemChamber.LayoutParams(MATCH_PARENT, Globals.dp2px*25);
                 setLayoutParams(params);
             }
         }
@@ -149,7 +164,7 @@ public class NoteHolderModes {
 
             public EditLower(Context context, final NotebookViewHolderUtils.NoteHolder noteHolder) {
                 super(context);
-                NotebookItemChamber.LayoutParams params1 = new NotebookItemChamber.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                NotebookItemChamber.LayoutParams params1 = new NotebookItemChamber.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
                 setLayoutParams(params1);
 
                 ExtendedToolbar extendedToolbar = new ExtendedToolbar(context,true,true, true){
@@ -186,7 +201,7 @@ public class NoteHolderModes {
                 };
                 addView(extendedToolbar);
 
-                EditLower.LayoutParams params2= new EditLower.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                EditLower.LayoutParams params2= new EditLower.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
                 extendedToolbar.setLayoutParams(params2);
             }
         }

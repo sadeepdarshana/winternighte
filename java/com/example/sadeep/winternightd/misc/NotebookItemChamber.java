@@ -30,6 +30,7 @@ public class NotebookItemChamber extends LinearLayout {
 
     public void setChamberContent(View content, boolean animate){
         emptyChamber(animate);
+        if(content==null)return;
 
         if(animate)XAnimation.addAndExpand(content,this,0,300,XAnimation.DIMENSION_HEIGHT,0);
         else addView(content,0);
