@@ -150,7 +150,8 @@ public class BottomBar extends LinearLayout{
     public void show(){
         if(currentAnimation!=null && currentAnimation.isRunning())currentAnimation.cancel();
 
-        ((NotebookActivity)getContext()).newNoteBottomBar.setGlassModeEnabled(true);
+        //((NotebookActivity)getContext()).newNoteBottomBar.setGlassModeEnabled(true);
+        //((NotebookActivity)getContext()).refreshBottomBar();
         currentAnimation = XAnimation.changeDimension(this, ANIMATION_DURATION, XAnimation.DIMENSION_HEIGHT, 0, storedHeight, new XAnimationListener() {
             @Override
             public void onEnd() {

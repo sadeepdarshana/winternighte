@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
+import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.bottombar.BottomBar;
 import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.misc.Utils;
@@ -114,8 +115,15 @@ final class NotebookViewHolderUtils {
                 @Override
                 public void onLayoutChange(View xv, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                     {
+                        boolean notebookFullyScrolled = notebook.layoutManager.findFirstCompletelyVisibleItemPosition()==0;
                         Footer.this.getLayoutParams().height = bottom;
                         Footer.this.requestLayout();
+                        if(notebookFullyScrolled)post(new Runnable() {
+                            @Override
+                            public void run() {
+                                notebook.scrollToPosition(0);
+                            }
+                        });
                     }
                 }
             });

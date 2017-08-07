@@ -1,4 +1,4 @@
 git add *
-git commit -m "growing"
+git commit
 git push origin master
 pause
