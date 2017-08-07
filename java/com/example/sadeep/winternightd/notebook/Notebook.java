@@ -168,6 +168,7 @@ public class Notebook extends RecyclerView {
 
 
         public void pushActiveNote() {
+            notebookActivity.activeNote=notebookActivity.newNote;
             if(activeNote==null)return;
             notebook.getNotebookDataHandler().addExistingNote(activeNote);
             activeNote = null;
@@ -180,6 +181,8 @@ public class Notebook extends RecyclerView {
         }
 
         public void cancelActiveNote(){
+            notebookActivity.activeNote=notebookActivity.newNote;
+            if(XSelection.isSelectionAvailable())XSelection.clearSelections();
             try {
                 noteHolderController.setAllNoteHoldersModeExcept(NoteHolderModes.DEFAULT_MODE, null, true);
 
@@ -199,6 +202,7 @@ public class Notebook extends RecyclerView {
 
         public void setActiveNote(Note activeNote) {
             this.activeNote = activeNote;
+            notebookActivity.activeNote=activeNote;
         }
     }
 }

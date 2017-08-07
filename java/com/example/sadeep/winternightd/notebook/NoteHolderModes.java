@@ -258,7 +258,6 @@ public class NoteHolderModes {
                 popupCard.setRadius(Globals.dp2px*23);
                 popupCard.setCardElevation(Globals.dp2px*2);
                 popupCard.addView(popupToolbar);
-                d.p(popupCard.getLayoutParams());
                 final int[]xy=new int[2];
                 noteHolder.getNotebook().getLocationOnScreen(xy);
                 ((LinearLayout.LayoutParams)popupCard.getLayoutParams()).setMargins(Globals.dp2px*4,Globals.dp2px*4,Globals.dp2px*4,Globals.dp2px*4);

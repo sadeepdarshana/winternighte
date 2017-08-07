@@ -99,7 +99,7 @@ class NotebookAdapter extends RecyclerView.Adapter <NotebookViewHolderUtils.Note
         if(holder.holder instanceof NotebookViewHolderUtils.NoteHolder){
             if(((NotebookViewHolderUtils.NoteHolder)holder.holder).getNote()== XSelection.getSelectedNote())
             {
-                XSelection.clearSelections();
+                if(XSelection.isSelectionAvailable())XSelection.clearSelections();
             }
 
             NotebookViewHolderUtils.NoteHolder noteHolder = (NotebookViewHolderUtils.NoteHolder)holder.holder;

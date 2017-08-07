@@ -1,6 +1,7 @@
 package com.example.sadeep.winternightd.selection;
 
 import android.graphics.Color;
+import android.provider.Settings;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.Spanned;
@@ -30,6 +31,7 @@ import com.example.sadeep.winternightd.textboxes.XEditText;
  */
 final public class XSelection {
     private static TextView textbox;
+    private static long selectionTime;
 
     private XSelection(){}
 
@@ -77,6 +79,7 @@ final public class XSelection {
 
     public static void newSelection(Note note, CursorPosition pos1, CursorPosition pos2, TextView xEditText){
         clearSelections();
+        selectionTime = System.currentTimeMillis();
         XSelection.note = note;
         XSelection.textbox =xEditText;
 
@@ -113,7 +116,7 @@ final public class XSelection {
     }
 
     public static void clearSelections() {
-
+        if(System.currentTimeMillis()<selectionTime+750)return;//// TODO: 8/8/2017 permanent solution
         Notebook.suspendScrollTemporary();
 
         if(note!=null)((NoteContainingActivity)note.getContext()).setActionBarMode(0);
