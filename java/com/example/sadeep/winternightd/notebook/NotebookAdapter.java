@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.example.sadeep.winternightd.localstorage.NotebookCursorReader;
+import com.example.sadeep.winternightd.misc.NotebookItemChamber;
 import com.example.sadeep.winternightd.note.Note;
 import com.example.sadeep.winternightd.note.NoteFactory;
 import com.example.sadeep.winternightd.note.NoteInfo;
@@ -95,10 +96,19 @@ class NotebookAdapter extends RecyclerView.Adapter <NotebookViewHolderUtils.Note
     @Override
     public void onViewDetachedFromWindow(NotebookViewHolderUtils.NotebookViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        if(holder.holder instanceof NotebookViewHolderUtils.NoteHolder &&
-                ((NotebookViewHolderUtils.NoteHolder)holder.holder).getNote()== XSelection.getSelectedNote())
-        {
-            XSelection.clearSelections();
+        if(holder.holder instanceof NotebookViewHolderUtils.NoteHolder){
+            if(((NotebookViewHolderUtils.NoteHolder)holder.holder).getNote()== XSelection.getSelectedNote())
+            {
+                XSelection.clearSelections();
+            }
+
+            NotebookViewHolderUtils.NoteHolder noteHolder = (NotebookViewHolderUtils.NoteHolder)holder.holder;
+            try{
+                ((NotebookItemChamber.ChamberContentView)noteHolder.getLowerChamber().getChildAt(0)).onRemoved();
+            }catch (Exception e){}
+            try{
+                ((NotebookItemChamber.ChamberContentView)noteHolder.getUpperChamber().getChildAt(0)).onRemoved();
+            }catch (Exception e){}
         }
     }
 

@@ -212,6 +212,8 @@ public class NotebookActivity extends NoteContainingActivity {
         newNote.convertToNewNoteWithOneDefaultField();
         ((SimpleIndentedField) newNote.getFieldAt(0)).getMainTextBox().requestFocus();
 
+        newNoteBottomBar.setToolbarVisibility(false);
+
         rootView.postDelayed(new Runnable() {
             @Override
             public void run() {

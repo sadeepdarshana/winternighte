@@ -2,6 +2,8 @@ package com.example.sadeep.winternightd.notebook;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.CountDownTimer;
+import android.support.v7.widget.CardView;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.sadeep.winternightd.activities.NotebookActivity;
@@ -19,9 +22,11 @@ import com.example.sadeep.winternightd.bottombar.ExtendedToolbar;
 import com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxOpener;
 import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.misc.NotebookItemChamber;
+import com.example.sadeep.winternightd.temp.d;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Random;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -87,7 +92,7 @@ public class NoteHolderModes {
             noteHolder.getNotebook().notebookActivity.refreshBottomBar();
         }
 
-        public static class ViewLower extends FrameLayout{
+        public static class ViewLower extends FrameLayout implements NotebookItemChamber.ChamberContentView{
             private long dateTime;
             private TextView dateTimeTextView;
 
@@ -120,6 +125,16 @@ public class NoteHolderModes {
                 Format dateFormat =new SimpleDateFormat("MMM d, ''yy h:mm a");
                 dateTimeTextView.setText(dateFormat.format(dateTime));
                 //todo omit year if same year etc + today,yesterday,6mins ago
+            }
+
+            @Override
+            public void onRemoved() {
+
+            }
+
+            @Override
+            public void onAttached() {
+
             }
         }
         public static class ViewUpper extends FrameLayout{
@@ -160,14 +175,16 @@ public class NoteHolderModes {
             }
         }
 
-        public static class EditLower extends LinearLayout{
+        public static class EditLower extends LinearLayout implements NotebookItemChamber.ChamberContentView{
+            public PopupWindow toolbarPopupWindow;
+            CountDownTimer timer;
 
             public EditLower(Context context, final NotebookViewHolderUtils.NoteHolder noteHolder) {
                 super(context);
                 NotebookItemChamber.LayoutParams params1 = new NotebookItemChamber.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
                 setLayoutParams(params1);
 
-                ExtendedToolbar extendedToolbar = new ExtendedToolbar(context,true,true, true){
+                final ExtendedToolbar extendedToolbar = new ExtendedToolbar(context,true,true, true){
                     @Override
                     protected void onAttachClick(View v) {
                         super.onAttachClick(v);
@@ -201,8 +218,97 @@ public class NoteHolderModes {
                 };
                 addView(extendedToolbar);
 
+                ExtendedToolbar popupToolbar = new ExtendedToolbar(context,true,true, true){
+                    @Override
+                    protected void onAttachClick(View v) {
+                        super.onAttachClick(v);
+                        if(!((AttachBoxOpener)v).isAttachboxOpen()) {
+                            ((AttachBoxOpener) v).setAttachboxOpened(true);
+                            AttachBoxManager.display(v,((NotebookActivity)v.getContext()).rootView.bottomLeftMarker, new OnAttachBoxItemClick() {
+                                @Override
+                                public void buttonClicked(int attachButtonId) {
+                                    Notebook.suspendScrollTemporary();
+                                    noteHolder.getNotebook().editor.getActiveNote().attachboxRequests(attachButtonId);
+                                }
+                            });
+                        }else{
+                            try {
+                                AttachBoxManager.popupWindow.dismiss();
+                            }catch (Exception e){}
+                        }
+                    }
+
+                    @Override
+                    protected void onCancelClick(View v) {
+                        super.onCancelClick(v);
+                        noteHolder.getNotebook().editor.cancelActiveNote();
+                    }
+
+                    @Override
+                    protected void onSendClick(View v) {
+                        super.onSendClick(v);
+                        noteHolder.getNotebook().editor.pushActiveNote();
+                    }
+                };
+                final LinearLayout popupLayout = new LinearLayout(getContext());
+                final CardView popupCard = new CardView(getContext());
+                popupCard.setPadding(Globals.dp2px*4,Globals.dp2px*4,Globals.dp2px*4,Globals.dp2px*4);
+                popupLayout.addView(popupCard);
+                popupCard.setCardBackgroundColor(0xffeeeeee);
+                popupCard.setRadius(Globals.dp2px*23);
+                popupCard.setCardElevation(Globals.dp2px*2);
+                popupCard.addView(popupToolbar);
+                d.p(popupCard.getLayoutParams());
+                final int[]xy=new int[2];
+                noteHolder.getNotebook().getLocationOnScreen(xy);
+                ((LinearLayout.LayoutParams)popupCard.getLayoutParams()).setMargins(Globals.dp2px*4,Globals.dp2px*4,Globals.dp2px*4,Globals.dp2px*4);
+                toolbarPopupWindow = new PopupWindow(popupLayout,MATCH_PARENT,WRAP_CONTENT){
+                    @Override
+                    public void showAtLocation(View parent, int gravity, int x, int y) {
+                        try {
+                            if (!this.isShowing())
+                                super.showAtLocation(EditLower.this, Gravity.NO_GRAVITY, 0, xy[1] );
+                        }catch (Exception e){}
+                    }
+
+
+                    @Override
+                    public void dismiss() {
+                        try {
+                            if (this.isShowing())
+                                super.dismiss();
+                        }catch (Exception e){}
+                    }
+
+                };
+                timer= new CountDownTimer(100000000000L,1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        if(noteHolder.getNotebook().notebookActivity.rootView.viewTopWithinRootViewBounds(extendedToolbar))
+                            toolbarPopupWindow.dismiss();
+                        else
+                            toolbarPopupWindow.showAtLocation(null,0,0,0);
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                    }
+                };
+                timer.start();
+
                 EditLower.LayoutParams params2= new EditLower.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
                 extendedToolbar.setLayoutParams(params2);
+            }
+
+            @Override
+            public void onRemoved() {
+                try{toolbarPopupWindow.dismiss();}catch (Exception e){}
+                timer.cancel();
+            }
+            @Override
+            public void onAttached() {
+                timer.start();
             }
         }
     }

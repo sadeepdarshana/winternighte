@@ -10,9 +10,11 @@ import com.example.sadeep.winternightd.localstorage.NotebookCursorReader;
 import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.bottombar.BottomBar;
 import com.example.sadeep.winternightd.localstorage.NotebookDataHandler;
+import com.example.sadeep.winternightd.misc.NotebookItemChamber;
 import com.example.sadeep.winternightd.misc.Utils;
 import com.example.sadeep.winternightd.note.Note;
 import com.example.sadeep.winternightd.notebook.NotebookViewHolderUtils.NoteHolder;
+import com.example.sadeep.winternightd.selection.XSelection;
 
 import java.util.ArrayList;
 
@@ -91,6 +93,13 @@ public class Notebook extends RecyclerView {
                 noteHolder.setMode(NoteHolderModes.MODE_EDIT,false);
             else
                 noteHolder.setMode(NoteHolderModes.MODE_VIEW,false);
+
+                try{
+                    ((NotebookItemChamber.ChamberContentView)noteHolder.getLowerChamber().getChildAt(0)).onAttached();
+                }catch (Exception e){}
+                try{
+                    ((NotebookItemChamber.ChamberContentView)noteHolder.getUpperChamber().getChildAt(0)).onAttached();
+                }catch (Exception e){}
         }
     }
 

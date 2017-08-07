@@ -36,6 +36,10 @@ public class NotebookItemChamber extends LinearLayout {
         else addView(content,0);
     }
     public void emptyChamber(boolean animate){
+        for(int i=0;i<getChildCount();i++)
+            if(getChildAt(i)instanceof ChamberContentView)
+                ((ChamberContentView)getChildAt(i)).onRemoved();
+
         if(animate)for(int i=0;i<getChildCount();i++)
             XAnimation.squeezeAndRemove(getChildAt(i),300,XAnimation.DIMENSION_HEIGHT,0);
         else
@@ -45,5 +49,11 @@ public class NotebookItemChamber extends LinearLayout {
     public View getChamberContent(){
         if(getChildCount()!=0)return getChildAt(0);
         return null;
+    }
+
+    public interface ChamberContentView{
+        void onRemoved();
+
+        void onAttached();
     }
 }

@@ -85,7 +85,7 @@ final public class AttachBoxManager {
         popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         popupWindow.setContentView(grid);
-        popupWindow.showAtLocation(button, Gravity.NO_GRAVITY,posX,posY);
+        popupWindow.showAtLocation(anchor, Gravity.NO_GRAVITY,posX,posY);
 
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override

@@ -43,6 +43,19 @@ public class NoteContainingActivityRootView extends RelativeLayout {
 
     }
 
+    public boolean viewTopWithinRootViewBounds(View view){
+        int xyView[] = new int[2];
+        view.getLocationOnScreen(xyView);
+        int y = xyView[1];
+
+        int xyRootView[] = new int[2];
+        getLocationOnScreen(xyRootView);
+
+        return (y>xyRootView[1] && y<xyRootView[1]+getHeight());
+
+    }
+
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         This=this;
