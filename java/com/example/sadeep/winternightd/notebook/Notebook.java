@@ -16,6 +16,7 @@ import com.example.sadeep.winternightd.misc.Utils;
 import com.example.sadeep.winternightd.note.Note;
 import com.example.sadeep.winternightd.notebook.NotebookViewHolderUtils.NoteHolder;
 import com.example.sadeep.winternightd.selection.XSelection;
+import com.example.sadeep.winternightd.temp.d;
 
 import java.util.ArrayList;
 
@@ -46,7 +47,7 @@ public class Notebook extends RecyclerView {
             deletethis.setLayoutFrozen(false);
             //scrollEnabled = true;
         }
-    };;
+    };
 
     public Notebook(NotebookActivity notebookActivity, String notebookGuid, BottomBar bottomBar) {
         super(notebookActivity);
@@ -120,6 +121,7 @@ public class Notebook extends RecyclerView {
         },50);
 
         Utils.hideKeyboard(getContext());
+        NotebookViewHolderUtils.Footer.keepScrolledToBottomFor1Sec();
     }
 
     @Override
@@ -207,8 +209,10 @@ public class Notebook extends RecyclerView {
         }
     }
 
-    public boolean scrolledToBottom() {
+    public boolean scrolledToBottom(){
         int position = layoutManager.findFirstCompletelyVisibleItemPosition();
-        return position == 0 || position == 1 && computeVerticalScrollOffset() < Globals.dp2px * 20;
+        if(position==0)return true;
+        //if(position!=1)return false;
+        return false;//computeVerticalScrollOffset() < Globals.dp2px * 5;//position=1
     }
 }

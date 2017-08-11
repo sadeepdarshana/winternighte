@@ -1,6 +1,8 @@
 package com.example.sadeep.winternightd.notebook;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,6 +106,23 @@ final class NotebookViewHolderUtils {
 
     static class Footer extends LinearLayout{
 
+
+        private static boolean keepScrolledToBottom = false;
+
+        private static Handler handler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                keepScrolledToBottom = false;
+            }
+        };
+
+        public static void keepScrolledToBottomFor1Sec(){
+            handler.removeCallbacksAndMessages(null);
+            keepScrolledToBottom=true;
+            handler.sendEmptyMessageDelayed(0,1000);
+        }
+
+
         public Footer(Context context, final Notebook notebook) {
             super(context);
 
@@ -115,10 +134,12 @@ final class NotebookViewHolderUtils {
                 @Override
                 public void onLayoutChange(View xv, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                     {
-                        boolean notebookFullyScrolled = notebook.layoutManager.findFirstCompletelyVisibleItemPosition()==0;
+                        if(notebook.scrolledToBottom())keepScrolledToBottomFor1Sec();
                         Footer.this.getLayoutParams().height = bottom;
                         Footer.this.requestLayout();
-                        if(notebookFullyScrolled)post(new Runnable() {
+
+
+                        if(keepScrolledToBottom)post(new Runnable() {
                             @Override
                             public void run() {
                                 notebook.scrollToPosition(0);

@@ -3,6 +3,7 @@ package com.example.sadeep.winternightd.activities;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -118,17 +119,17 @@ public class NotebookActivity extends NoteContainingActivity {
         //getWindow().setBackgroundDrawableResource(R.drawable.yyy);
         setActionBarMode(NoteContainingActivity.ACTIONBAR_NORMAL);
 
-        final int[] notebookFirstCompletelyVisibleItemPosition = {0};//'int[1]' because java syntax doesn't allow 'int' here
+        final boolean[] notebookScrolledToBottom = {false};//'int[1]' because java syntax doesn't allow 'int' here
         rootView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                notebookFirstCompletelyVisibleItemPosition[0] = notebook.layoutManager.findFirstCompletelyVisibleItemPosition();
+                notebookScrolledToBottom[0] = notebook.scrolledToBottom();
             }
         });
         rootView.keyboardListener = new NoteContainingActivityRootView.KeyboardListener() {
             @Override
             public void beforeKeyboardOpen() {
-                if(notebookFirstCompletelyVisibleItemPosition[0]==0&& notebook.editor.getActiveNote()==null){
+                if(notebookScrolledToBottom[0] && notebook.editor.getActiveNote()==null){
                     newNoteBottomBar.extendedToolbar.toolbarAnimationListener = new XAnimationListener() {
                         @Override
                         public void onEnd() {
@@ -140,9 +141,28 @@ public class NotebookActivity extends NoteContainingActivity {
                             notebook.scrollToPosition(0);
                         }
                     };
+                    notebook.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            notebook.smoothScrollToPosition(0);
+                        }
+                    },400);
                 }
             }
         };
+
+        new CountDownTimer(1000000000000000L,500){
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                disableBottomBarGlassModeIfNecessary();
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
     }
 
     public void refreshBottomBar(){
@@ -235,7 +255,7 @@ public class NotebookActivity extends NoteContainingActivity {
 
     public void disableBottomBarGlassModeIfNecessary(){
         if (  notebook.editor.getActiveNote() == null
-            &&((LinearLayoutManager) notebook.getLayoutManager()).findFirstCompletelyVisibleItemPosition() == 0)
+            &&notebook.scrolledToBottom())
         {
             newNoteBottomBar.setGlassModeEnabled(false);
         }
@@ -244,7 +264,7 @@ public class NotebookActivity extends NoteContainingActivity {
     public void enableBottomBarToGlassModeIfNecessary(){
         if (   notebook.editor.getActiveNote() == null
             && newNote.isEmpty()
-            && ((LinearLayoutManager) notebook.getLayoutManager()).findFirstCompletelyVisibleItemPosition() != 0)
+            && !notebook.scrolledToBottom())
         {
 
             newNoteBottomBar.setGlassModeEnabled(true);
