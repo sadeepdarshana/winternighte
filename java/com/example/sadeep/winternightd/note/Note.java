@@ -47,6 +47,8 @@ public class Note extends LinearLayout {
 
     public NoteInfo noteInfo;
 
+    public boolean noteHolderInfomationColorSpecial = false;
+
     Note(Context context,boolean isEditable, boolean isNewNote, View scrollableParent) {
         super(context);
         this.scrollableParent = scrollableParent;

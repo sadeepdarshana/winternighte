@@ -30,6 +30,8 @@ import java.util.Random;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static com.example.sadeep.winternightd.notebook.NoteHolderModes.ModeView.ViewLower.DATETIME_COLOR_DEFAULT;
+import static com.example.sadeep.winternightd.notebook.NoteHolderModes.ModeView.ViewLower.DATETIME_COLOR_SPECIAL;
 
 /**
  * Created by Sadeep on 7/24/2017.
@@ -66,6 +68,12 @@ public class NoteHolderModes {
 
                     return true;
                 }
+
+                @Override
+                public boolean onSingleTapConfirmed(MotionEvent e) {
+                    d.wow(noteHolder.getContext());
+                    return true;
+                }
             });
 
             noteHolder.getNoteSpace().setOnTouchListener(new View.OnTouchListener() {
@@ -75,15 +83,28 @@ public class NoteHolderModes {
                     return true;
                 }
             });
+            viewLower.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    gestureDetector.onTouchEvent(event);
+                    return true;
+                }
+            });
 
             noteHolder.mode = MODE_VIEW;
 
-            if(noteHolder.getNote()!=null) viewLower.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
+            if(noteHolder.getNote()!=null) {
+                viewLower.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
+                viewLower.dateTimeTextView.setTextColor(
+                        noteHolder.getNote().noteHolderInfomationColorSpecial ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);
+            }
         }
 
         public static void onBind(NotebookViewHolderUtils.NoteHolder noteHolder) {
             ViewLower viewLower = (ViewLower) noteHolder.getLowerChamber().getChamberContent();
             viewLower.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
+            viewLower.dateTimeTextView.setTextColor(
+                    noteHolder.getNote().noteHolderInfomationColorSpecial ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);
         }
 
         public static void setAsActiveNote(NotebookViewHolderUtils.NoteHolder noteHolder) {
@@ -96,6 +117,9 @@ public class NoteHolderModes {
             private long dateTime;
             private TextView dateTimeTextView;
 
+            public static final int DATETIME_COLOR_DEFAULT = 0xff999999;
+            public static final int DATETIME_COLOR_SPECIAL = 0xff66aa66;
+
             public void setDateTime(long dateTime){
                 this.dateTime = dateTime;
                 updateDateTimeTextView();
@@ -106,7 +130,7 @@ public class NoteHolderModes {
                 setLayoutParams(new NotebookItemChamber.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
 
                 dateTimeTextView = new TextView(context);
-                dateTimeTextView.setTextColor(0xff999999);
+                dateTimeTextView.setTextColor(DATETIME_COLOR_DEFAULT);
                 dateTimeTextView.setTextSize(TypedValue.COMPLEX_UNIT_FRACTION,  Globals.defaultFontSize*.67f);
 
                 LayoutParams params=new LayoutParams(WRAP_CONTENT,WRAP_CONTENT);

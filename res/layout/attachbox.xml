@@ -17,6 +17,14 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:background="#22aaaaaa" />
+    <View
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#44aaaaaa" />
 
 
     <android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"

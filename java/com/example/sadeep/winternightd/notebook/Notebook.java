@@ -20,6 +20,8 @@ import com.example.sadeep.winternightd.temp.d;
 
 import java.util.ArrayList;
 
+import static com.example.sadeep.winternightd.notebook.NoteHolderModes.MODE_VIEW;
+
 /**
  * Created by Sadeep on 10/26/2016.
  */
@@ -94,7 +96,7 @@ public class Notebook extends RecyclerView {
             if(noteHolder.getNote().noteInfo.noteUUID.equals(editor.getActiveNoteUUID()))
                 noteHolder.setMode(NoteHolderModes.MODE_EDIT,false);
             else
-                noteHolder.setMode(NoteHolderModes.MODE_VIEW,false);
+                noteHolder.setMode(MODE_VIEW,false);
 
                 try{
                     ((NotebookItemChamber.ChamberContentView)noteHolder.getLowerChamber().getChildAt(0)).onAttached();
@@ -174,10 +176,16 @@ public class Notebook extends RecyclerView {
             notebookActivity.activeNote=notebookActivity.newNote;
             if(activeNote==null)return;
             notebook.getNotebookDataHandler().addExistingNote(activeNote);
+
+            activeNote.noteHolderInfomationColorSpecial = true;
+
             activeNote = null;
+
             notebookActivity.refreshBottomBar();
-            refresh();
-            notebook.scrollToPosition(0);
+            //refresh();
+            //notebook.scrollToPosition(0);
+            notebook.noteHolderController.setAllNoteHoldersModeExcept(MODE_VIEW,null,true);
+            Utils.hideKeyboard(getContext());
             notebookActivity.onNotebookScrolled(-1);
             notebookActivity.newNoteBottomBar.setGlassModeEnabled(true);
             notebookActivity.newNoteBottomBar.setToolbarVisibility(false);
