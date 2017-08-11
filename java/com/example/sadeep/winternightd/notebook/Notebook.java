@@ -77,7 +77,7 @@ public class Notebook extends RecyclerView {
         postDelayed(new Runnable() {
             @Override
             public void run() {
-                layoutManager.scrollToPositionWithOffset(0,500);
+                //layoutManager.scrollToPositionWithOffset(0,500);
             }
         },2);
 
@@ -110,11 +110,11 @@ public class Notebook extends RecyclerView {
     public void refresh() {
         dataHandler = new NotebookDataHandler(notebookGuid);
         setAdapter(new NotebookAdapter(notebookActivity,new NotebookCursorReader(dataHandler.getCursor()),this));
+        scrollToPosition(0);
 
         postDelayed(new Runnable() {
             @Override
-            public void run() { 
-                smoothScrollToPosition(0);
+            public void run() {
             }
         },50);
 

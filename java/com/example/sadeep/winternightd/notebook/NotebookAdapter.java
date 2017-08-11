@@ -1,6 +1,7 @@
 package com.example.sadeep.winternightd.notebook;
 
 import android.content.Context;
+import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
@@ -39,7 +40,7 @@ class NotebookAdapter extends RecyclerView.Adapter <NotebookViewHolderUtils.Note
         new Thread(new Runnable() {
             final int maxNumberOfNotesToCaches = 200;
             public void run(){
-
+                Looper.prepare();
                 int noteCount = cursor.getCursor().getCount();
 
                 for(int i=0;i<Math.min(noteCount,maxNumberOfNotesToCaches);i++){

@@ -14,6 +14,7 @@
         android:padding="7dp"
         android:layout_margin="0dp"
         android:tag="3"
+        android:visibility="gone"
         android:src="@drawable/ic_border_color_white_24dp" />
     <com.example.sadeep.winternightd.buttons.customizedbuttons.ToolbarButton
         android:layout_width="0dp"

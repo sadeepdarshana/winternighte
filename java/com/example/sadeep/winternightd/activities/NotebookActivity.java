@@ -4,6 +4,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -253,5 +255,13 @@ public class NotebookActivity extends NoteContainingActivity {
 
     public Notebook getNotebook() {
         return notebook;
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(AttachBoxManager.displayed){
+            AttachBoxManager.tryDismiss();
+            return true;
+        }else return super.onKeyUp(keyCode, event);
     }
 }

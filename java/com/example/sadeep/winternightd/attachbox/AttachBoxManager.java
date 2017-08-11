@@ -11,7 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
@@ -28,6 +29,7 @@ import com.example.sadeep.winternightd.misc.Globals;
 final public class AttachBoxManager {
     private AttachBoxManager() {}
 
+    public static boolean displayed = false;
 
     public static final int ATTACH_BUTTON_ID_CHECKEDFIELD = 0;
     public static final int ATTACH_BUTTON_ID_BULLETEDFIELD = 1;
@@ -74,8 +76,9 @@ final public class AttachBoxManager {
         final int rippleY = _rippleY;
 
 
-        final LinearLayout grid = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.attachbox,(ViewGroup) button.getParent(),false);
-        ((GridLayout)grid.getChildAt(1)).setColumnCount(screenWidth/(ATTACHBOX_BUTTON_MINIMUM_WIDTH));
+        final ViewGroup gridContainer = (ViewGroup) LayoutInflater.from(context).inflate(R.layout.attachbox,(ViewGroup) button.getParent(),false);
+        final GridLayout grid = (GridLayout) gridContainer.findViewById(R.id.gridLayout);
+        grid.setColumnCount(screenWidth/(ATTACHBOX_BUTTON_MINIMUM_WIDTH));
 
 
         final PopupWindow popupWindow = new PopupWindow(context);
@@ -84,12 +87,14 @@ final public class AttachBoxManager {
         popupWindow.setWidth(screenWidth);
         popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-        popupWindow.setContentView(grid);
+        popupWindow.setContentView(gridContainer);
         popupWindow.showAtLocation(anchor, Gravity.NO_GRAVITY,posX,posY);
 
         popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
+                displayed = false;
+
                 try {
                     ((AttachButton)button).setMode(0);
                 }catch (Exception e){}
@@ -105,8 +110,8 @@ final public class AttachBoxManager {
             }
         });
 
-        for(int i=0;i<((GridLayout)grid.getChildAt(1)).getChildCount();i++){
-            ((GridLayout)grid.getChildAt(1)).getChildAt(i).setOnClickListener(new View.OnClickListener() {
+        for(int i=0;i<grid.getChildCount();i++){
+            grid.getChildAt(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View v) {
                     if(!(v instanceof AttachBoxButton))return;
@@ -114,7 +119,7 @@ final public class AttachBoxManager {
                     button.post(new Runnable() {
                         @Override
                         public void run() {
-                            Animator anim = ViewAnimationUtils.createCircularReveal(grid,rippleX,rippleY, (float) Math.hypot(grid.getWidth(), grid.getHeight()),0);
+                            Animator anim = ViewAnimationUtils.createCircularReveal(gridContainer,rippleX,rippleY, (float) Math.hypot(gridContainer.getWidth(), gridContainer.getHeight()),0);
                             anim.setDuration(200) ;
                             anim.start();
                         }
@@ -134,14 +139,14 @@ final public class AttachBoxManager {
         button.post(new Runnable() {
             @Override
             public void run() {
-                grid.setVisibility(View.VISIBLE);
-                Animator anim = ViewAnimationUtils.createCircularReveal(grid, rippleX, rippleY, 0, (float) Math.hypot(grid.getWidth(), grid.getHeight()));
-                anim.setDuration(500) ;
-                anim.start();
+                gridContainer.setVisibility(View.VISIBLE);
+                Animation anim = AnimationUtils.loadAnimation(button.getContext(),R.anim.bottom_up);
+                anim.setDuration(200) ;
+                gridContainer.startAnimation(anim);
             }
         });
 
-
+        displayed = true;
     }
 
 

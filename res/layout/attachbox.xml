@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:grid="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff">
+    android:background="#ebeff2">
 
 
 
@@ -18,13 +18,13 @@
         android:layout_height="0.5dp"
         android:background="#22aaaaaa" />
 
+
     <android.support.v7.widget.GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         xmlns:grid="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/activity_test_activityy"
+        android:id="@+id/gridLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fafafa">
+        android:layout_marginTop="14dp">
 
         <com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxButton
             android:layout_width="wrap_content"
@@ -33,8 +33,9 @@
             android:tag="0#00bfa5"
             grid:layout_columnWeight="1"
             android:paddingTop="7dp"
+            android:paddingBottom="7dp"
             android:visibility="gone"
-            android:src="@drawable/ic_checkbox_marked_white_36dp" />
+            android:src="@drawable/attachbox_check" />
 
         <com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxButton
             android:layout_width="wrap_content"
@@ -44,34 +45,45 @@
             grid:layout_columnWeight="1"
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
-            android:src="@drawable/xx" />
+            android:src="@drawable/attachbox_check" />
         <com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
-            android:tag="1#3d5afe"
+            android:tag="1#ffffffff"
             grid:layout_columnWeight="1"
             android:paddingTop="7dp"
-            android:src="@drawable/ic_format_list_bulleted_white_36dp" />
-
-        <com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="0dp"
-            android:tag="2#ff7043"
-            grid:layout_columnWeight="1"
-            android:paddingTop="7dp"
-            android:src="@drawable/ic_format_list_numbers_white_36dp" />
+            android:paddingBottom="7dp"
+            android:src="@drawable/attachbox_bullet" />
 
         <com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
-            android:tag="3#8d6e63"
+            android:tag="2#ffffff"
             grid:layout_columnWeight="1"
             android:paddingTop="7dp"
-            android:src="@drawable/ic_camera_white_48dp" />
+            android:paddingBottom="7dp"
+            android:src="@drawable/number" />
 
-        </android.support.v7.widget.GridLayout>
+        <com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:tag="3#ffffff"
+            grid:layout_columnWeight="1"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:src="@drawable/cam" />
 
-</LinearLayout>
+    </android.support.v7.widget.GridLayout>
+
+
+    <com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxCloseButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/close"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true" />
+
+</RelativeLayout>
