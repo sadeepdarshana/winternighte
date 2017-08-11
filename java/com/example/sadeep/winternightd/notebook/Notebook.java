@@ -10,6 +10,7 @@ import com.example.sadeep.winternightd.localstorage.NotebookCursorReader;
 import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.bottombar.BottomBar;
 import com.example.sadeep.winternightd.localstorage.NotebookDataHandler;
+import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.misc.NotebookItemChamber;
 import com.example.sadeep.winternightd.misc.Utils;
 import com.example.sadeep.winternightd.note.Note;
@@ -204,5 +205,10 @@ public class Notebook extends RecyclerView {
             this.activeNote = activeNote;
             notebookActivity.activeNote=activeNote;
         }
+    }
+
+    public boolean scrolledToBottom() {
+        int position = layoutManager.findFirstCompletelyVisibleItemPosition();
+        return position == 0 || position == 1 && computeVerticalScrollOffset() < Globals.dp2px * 20;
     }
 }
