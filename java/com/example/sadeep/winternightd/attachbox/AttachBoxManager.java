@@ -119,9 +119,9 @@ final public class AttachBoxManager {
                     button.post(new Runnable() {
                         @Override
                         public void run() {
-                            Animator anim = ViewAnimationUtils.createCircularReveal(gridContainer,rippleX,rippleY, (float) Math.hypot(gridContainer.getWidth(), gridContainer.getHeight()),0);
+                            Animation anim = AnimationUtils.loadAnimation(button.getContext(),R.anim.bottom_down);
                             anim.setDuration(200) ;
-                            anim.start();
+                            gridContainer.startAnimation(anim);
                         }
                     });
 
@@ -152,8 +152,26 @@ final public class AttachBoxManager {
 
     public static void tryDismiss() {
         try{
-            AttachBoxManager.popupWindow.dismiss();
+            final View gridContainer = popupWindow.getContentView();
+
+            gridContainer.post(new Runnable() {
+                @Override
+                public void run() {
+                    Animation anim = AnimationUtils.loadAnimation(gridContainer.getContext(),R.anim.bottom_down);
+                    anim.setDuration(200) ;
+                    gridContainer.startAnimation(anim);
+                }
+            });
+
+            gridContainer.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    popupWindow.dismiss();
+                }
+            },201);
         }
-        catch (Exception e){}
+        catch (Exception e){
+
+        }
     }
 }

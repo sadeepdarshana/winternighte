@@ -251,6 +251,7 @@ public class NoteHolderModes {
                     }
                 };
                 final LinearLayout popupLayout = new LinearLayout(getContext());
+                popupLayout.setGravity(Gravity.CENTER_HORIZONTAL);
                 final CardView popupCard = new CardView(getContext());
                 popupCard.setPadding(Globals.dp2px*4,Globals.dp2px*4,Globals.dp2px*4,Globals.dp2px*4);
                 popupLayout.addView(popupCard);
@@ -266,7 +267,7 @@ public class NoteHolderModes {
                     public void showAtLocation(View parent, int gravity, int x, int y) {
                         try {
                             if (!this.isShowing())
-                                super.showAtLocation(EditLower.this, Gravity.NO_GRAVITY, 0, xy[1] );
+                                super.showAtLocation(EditLower.this, Gravity.TOP, 0, xy[1] );
                         }catch (Exception e){}
                     }
 
