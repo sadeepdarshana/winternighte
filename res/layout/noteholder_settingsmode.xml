@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.example.sadeep.winternightd.buttons.customizedbuttons.NoteHolderModeSettingsButton
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:padding="7dp"
+        android:tag="3"
+        android:id="@+id/edit"
+        android:src="@drawable/ic_edit_white_24dp" />
+
+    <View
+        android:layout_height="match_parent"
+        android:layout_width=".5dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:background="#cccccc"
+        />
+
+    <com.example.sadeep.winternightd.buttons.customizedbuttons.NoteHolderModeSettingsButton
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:padding="7dp"
+        android:tag="3"
+        android:id="@+id/delete"
+        android:src="@drawable/ic_delete_white_24dp" />
+
+
+</merge>

@@ -16,6 +16,7 @@ import com.example.sadeep.winternightd.misc.Utils;
 import com.example.sadeep.winternightd.note.Note;
 
 import static com.example.sadeep.winternightd.notebook.NoteHolderModes.MODE_EDIT;
+import static com.example.sadeep.winternightd.notebook.NoteHolderModes.MODE_SETTINGS;
 import static com.example.sadeep.winternightd.notebook.NoteHolderModes.MODE_VIEW;
 
 /**
@@ -72,11 +73,13 @@ final class NotebookViewHolderUtils {
         private void onBind() {
             if(mode==MODE_VIEW) NoteHolderModes.ModeView.onBind(this);
             if(mode==MODE_EDIT) NoteHolderModes.ModeEdit.onBind(this);
+            if(mode==MODE_SETTINGS) NoteHolderModes.ModeSettings.onBind(this);
         }
 
         public void setMode(int mode,final boolean animate){
             if(mode==MODE_VIEW) NoteHolderModes.ModeView.setAsNoteHolderMode(this,animate);
             if(mode==MODE_EDIT) NoteHolderModes.ModeEdit.setAsNoteHolderMode(this,animate);
+            if(mode==MODE_SETTINGS) NoteHolderModes.ModeSettings.setAsNoteHolderMode(this,animate);
         }
 
         public int getMode() {
