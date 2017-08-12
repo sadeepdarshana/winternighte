@@ -118,7 +118,7 @@ public class NoteHolderModes {
             private TextView dateTimeTextView;
 
             public static final int DATETIME_COLOR_DEFAULT = 0xff999999;
-            public static final int DATETIME_COLOR_SPECIAL = 0xff66aa66;
+            public static final int DATETIME_COLOR_SPECIAL = 0xff66cc66;
 
             public void setDateTime(long dateTime){
                 this.dateTime = dateTime;

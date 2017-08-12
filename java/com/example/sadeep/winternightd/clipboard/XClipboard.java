@@ -114,6 +114,13 @@ final public class XClipboard {
             SimpleIndentedField field = (SimpleIndentedField) note.getFieldAt(cp.fieldIndex);
             XEditText edittext = (XEditText) field.getMainTextBox();
 
+            if(clipedSelectionStartText.length()==0 && clipedSelectionFields.size()==0){
+                try{
+                    ClipboardManager clipboardManager = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+                    clipedSelectionStartText = clipboardManager.getPrimaryClip().getItemAt(0).getText();
+                }catch (Exception e){}
+            }
+
             CharSequence oldtext = edittext.getText();
             CharSequence textbegin = android.text.TextUtils.concat(oldtext.subSequence(0,cp.characterIndex),XClipboard.clipedSelectionStartText);
             CharSequence textend = oldtext.subSequence(cp.characterIndex,oldtext.length());
