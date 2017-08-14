@@ -155,7 +155,9 @@ public class NotebookActivity extends NoteContainingActivity {
 
             @Override
             public void onTick(long millisUntilFinished) {
+                if(millisUntilFinished>=1000000000000000L-500*3)return;
                 disableBottomBarGlassModeIfNecessary();
+                enableBottomBarToGlassModeIfNecessary();
             }
 
             @Override

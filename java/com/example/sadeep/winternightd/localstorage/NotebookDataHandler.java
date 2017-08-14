@@ -43,6 +43,12 @@ public class NotebookDataHandler {
         DataConnection.writableDatabase().insertWithOnConflict(notebookUUID,null,values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
+    public void deleteNote(String  noteUUID){
+        try {
+            DataConnection.writableDatabase().delete(notebookUUID, "noteId = '" + noteUUID + "'", null);
+        }catch (Exception e){}
+    }
+
     public Cursor getCursorForNote(String noteUUID){
         return DataConnection.readableDatabase().rawQuery("SELECT * FROM "+ notebookUUID +" WHERE `noteId`='"+noteUUID+"'",null);
     }

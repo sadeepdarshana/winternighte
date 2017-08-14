@@ -10,16 +10,15 @@ import com.example.sadeep.winternightd.localstorage.NotebookCursorReader;
 import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.bottombar.BottomBar;
 import com.example.sadeep.winternightd.localstorage.NotebookDataHandler;
-import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.misc.NotebookItemChamber;
 import com.example.sadeep.winternightd.misc.Utils;
 import com.example.sadeep.winternightd.note.Note;
 import com.example.sadeep.winternightd.notebook.NotebookViewHolderUtils.NoteHolder;
 import com.example.sadeep.winternightd.selection.XSelection;
-import com.example.sadeep.winternightd.temp.d;
 
 import java.util.ArrayList;
 
+import static com.example.sadeep.winternightd.note.Note.STATE_EDITED;
 import static com.example.sadeep.winternightd.notebook.NoteHolderModes.MODE_VIEW;
 
 /**
@@ -177,7 +176,7 @@ public class Notebook extends RecyclerView {
             if(activeNote==null)return;
             notebook.getNotebookDataHandler().addExistingNote(activeNote);
 
-            activeNote.noteHolderInfomationColorSpecial = true;
+            activeNote.noteState = STATE_EDITED;
 
             activeNote = null;
 

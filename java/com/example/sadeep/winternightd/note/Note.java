@@ -47,7 +47,10 @@ public class Note extends LinearLayout {
 
     public NoteInfo noteInfo;
 
-    public boolean noteHolderInfomationColorSpecial = false;
+    public int noteState = STATE_NORMAL;
+    public static final int STATE_NORMAL = 0;
+    public static final int STATE_EDITED = 1;
+    public static final int STATE_DELETED = 2;
 
     Note(Context context,boolean isEditable, boolean isNewNote, View scrollableParent) {
         super(context);

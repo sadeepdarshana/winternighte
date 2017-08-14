@@ -1,39 +1,38 @@
 package com.example.sadeep.winternightd.notebook;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.example.sadeep.winternightd.R;
 import com.example.sadeep.winternightd.activities.NotebookActivity;
+import com.example.sadeep.winternightd.animation.XAnimation;
+import com.example.sadeep.winternightd.animation.XAnimationListener;
 import com.example.sadeep.winternightd.attachbox.AttachBoxManager;
 import com.example.sadeep.winternightd.attachbox.OnAttachBoxItemClick;
 import com.example.sadeep.winternightd.bottombar.ExtendedToolbar;
 import com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxOpener;
-import com.example.sadeep.winternightd.buttons.customizedbuttons.NoteHolderModeSettingsButton;
 import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.misc.NotebookItemChamber;
-import com.example.sadeep.winternightd.temp.d;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.Random;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static com.example.sadeep.winternightd.note.Note.STATE_DELETED;
+import static com.example.sadeep.winternightd.note.Note.STATE_EDITED;
 import static com.example.sadeep.winternightd.notebook.NoteHolderModes.ModeView.ViewLower.DATETIME_COLOR_DEFAULT;
 import static com.example.sadeep.winternightd.notebook.NoteHolderModes.ModeView.ViewLower.DATETIME_COLOR_SPECIAL;
 
@@ -52,6 +51,10 @@ public class NoteHolderModes {
 
         public static void setAsNoteHolderMode(final NotebookViewHolderUtils.NoteHolder noteHolder, boolean animate){
             if(noteHolder.getMode()== MODE_VIEW)return;
+
+
+            if(noteHolder.getNote()!=null)noteHolder.setVisibility(
+                    noteHolder.getNote().noteState==STATE_DELETED ? View.GONE:View.VISIBLE);
 
             if(noteHolder.getNote()!=null)noteHolder.getNote().setEditable(false);
             noteHolder.noteEditable = false;
@@ -101,7 +104,7 @@ public class NoteHolderModes {
             if(noteHolder.getNote()!=null) {
                 viewLower.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
                 viewLower.dateTimeTextView.setTextColor(
-                        noteHolder.getNote().noteHolderInfomationColorSpecial ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);
+                        noteHolder.getNote().noteState==STATE_EDITED ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);
             }
         }
 
@@ -109,7 +112,7 @@ public class NoteHolderModes {
             ViewLower viewLower = (ViewLower) noteHolder.getLowerChamber().getChamberContent();
             viewLower.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
             viewLower.dateTimeTextView.setTextColor(
-                    noteHolder.getNote().noteHolderInfomationColorSpecial ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);
+                    noteHolder.getNote().noteState==STATE_EDITED ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);
         }
 
         public static void setAsActiveNote(NotebookViewHolderUtils.NoteHolder noteHolder) {
@@ -179,6 +182,9 @@ public class NoteHolderModes {
 
         public static void setAsNoteHolderMode(NotebookViewHolderUtils.NoteHolder noteHolder, boolean animate){
             if(noteHolder.getMode()== MODE_EDIT)return;
+
+            if(noteHolder.getNote()!=null)noteHolder.setVisibility(
+                    noteHolder.getNote().noteState==STATE_DELETED ? View.GONE:View.VISIBLE);
 
             if(noteHolder.getNote()!=null)noteHolder.getNote().setEditable(true);
             noteHolder.noteEditable = true;
@@ -347,6 +353,10 @@ public class NoteHolderModes {
             if(noteHolder.getMode()== MODE_SETTINGS)return;
             if(noteHolder.getNotebook().editor.getActiveNote()!=null)return;
 
+
+            if(noteHolder.getNote()!=null)noteHolder.setVisibility(
+                    noteHolder.getNote().noteState==STATE_DELETED ? View.GONE:View.VISIBLE);
+
             noteHolder.getNotebook().noteHolderController.setAllNoteHoldersModeExcept(MODE_VIEW,null,true);
 
             if(noteHolder.getNote()!=null)noteHolder.getNote().setEditable(false);
@@ -391,7 +401,7 @@ public class NoteHolderModes {
             if(noteHolder.getNote()!=null) {
                 settingsUpper.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
                 settingsUpper.dateTimeTextView.setTextColor(
-                        noteHolder.getNote().noteHolderInfomationColorSpecial ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);
+                        noteHolder.getNote().noteState==STATE_EDITED ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);
             }
         }
 
@@ -399,7 +409,7 @@ public class NoteHolderModes {
             SettingsUpper settingsUpper = (SettingsUpper) noteHolder.getLowerChamber().getChamberContent();
             settingsUpper.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
             settingsUpper.dateTimeTextView.setTextColor(
-                    noteHolder.getNote().noteHolderInfomationColorSpecial ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);
+                    noteHolder.getNote().noteState==STATE_EDITED ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);
         }
 
         public static void setAsActiveNote(NotebookViewHolderUtils.NoteHolder noteHolder) {
@@ -470,6 +480,29 @@ public class NoteHolderModes {
                         noteHolder.getNoteSpace().setOnTouchListener(null);
                         noteHolder.setMode(MODE_EDIT,true);
                         setAsActiveNote(noteHolder);
+                    }
+                });
+                findViewById(R.id.delete).setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        noteHolder.getNotebook().getNotebookDataHandler().deleteNote(noteHolder.getNote().noteInfo.noteUUID);
+                        XAnimation.changeDimension(noteHolder, 300, XAnimation.DIMENSION_HEIGHT, noteHolder.getHeight(), 0, new XAnimationListener() {
+                            @Override
+                            public void onEnd() {
+                                noteHolder.setVisibility(GONE);
+                                noteHolder.getNote().noteState = STATE_DELETED;
+
+                                Notebook.LayoutParams params = (RecyclerView.LayoutParams)noteHolder.getLayoutParams();
+                                int margin = 0;
+                                params.setMargins(margin,margin,margin,margin);
+                                noteHolder.requestLayout();
+                            }
+
+                            @Override
+                            public void onStep() {
+                                
+                            }
+                        });
                     }
                 });
             }

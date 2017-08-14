@@ -3,9 +3,11 @@ package com.example.sadeep.winternightd.notebook;
 import android.content.Context;
 import android.os.Looper;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.sadeep.winternightd.localstorage.NotebookCursorReader;
+import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.misc.NotebookItemChamber;
 import com.example.sadeep.winternightd.note.Note;
 import com.example.sadeep.winternightd.note.NoteFactory;
@@ -14,6 +16,8 @@ import com.example.sadeep.winternightd.selection.XSelection;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static com.example.sadeep.winternightd.note.Note.STATE_DELETED;
 import static com.example.sadeep.winternightd.notebook.NoteHolderModes.MODE_EDIT;
 import static com.example.sadeep.winternightd.notebook.NoteHolderModes.MODE_VIEW;
 import static com.example.sadeep.winternightd.notebook.NotebookViewHolderUtils.VIEWTYPE_FOOTER;
@@ -90,6 +94,16 @@ class NotebookAdapter extends RecyclerView.Adapter <NotebookViewHolderUtils.Note
                 }
                 noteHolder.bind(note, MODE_VIEW);
                 noteHolder.setMode(MODE_VIEW, false);
+            }
+
+
+            if(noteHolder.getNote()!=null){
+                noteHolder.setVisibility(noteHolder.getNote().noteState==STATE_DELETED ? View.GONE:View.VISIBLE);
+                noteHolder.getLayoutParams().height= noteHolder.getNote().noteState==STATE_DELETED ? 0:WRAP_CONTENT;
+                Notebook.LayoutParams params = (RecyclerView.LayoutParams)noteHolder.getLayoutParams();
+                int margin = noteHolder.getNote().noteState==STATE_DELETED ? 0:Globals.dp2px*5;
+                params.setMargins(margin,margin,margin,margin);
+                noteHolder.requestLayout();
             }
         }
     }
