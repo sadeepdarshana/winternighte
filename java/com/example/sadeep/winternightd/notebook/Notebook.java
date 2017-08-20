@@ -39,25 +39,25 @@ public class Notebook extends RecyclerView {
 
     public NoteHolderController noteHolderController = new NoteHolderController();
 
-    static Notebook deletethis=null;
+    static Notebook deletethis_mem_leak =null;
 
     private static Handler scrollresumer = new Handler(){
         @Override
         public void handleMessage(Message msg) {
 
-            deletethis.setLayoutFrozen(false);
+            deletethis_mem_leak.setLayoutFrozen(false);
             //scrollEnabled = true;
         }
     };
 
     public Notebook(NotebookActivity notebookActivity, String notebookGuid, BottomBar bottomBar) {
         super(notebookActivity);
-        deletethis=this;
+        deletethis_mem_leak =this;
         this.notebookActivity = notebookActivity;
         this.notebookGuid = notebookGuid;
         this.bottomBar = bottomBar;
 
-        setOverScrollMode(OVER_SCROLL_NEVER);
+
 
         editor = new Editor(this);
 
@@ -133,7 +133,9 @@ public class Notebook extends RecyclerView {
 
 
     public static void suspendScrollTemporary() {
-        deletethis.setLayoutFrozen(true);
+        try{
+            deletethis_mem_leak.setLayoutFrozen(true);
+        }catch (Exception e){}
         //scrollEnabled = false;
 
         scrollresumer.removeCallbacksAndMessages(null);

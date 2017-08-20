@@ -37,6 +37,8 @@ public class CatalogActivity extends AppCompatActivity {
 
         EditText titlebox = (EditText)findViewById(R.id.title);
         titlebox.setFocusableInTouchMode(true);
+
+
     }
 
     public void onClick(View view) {

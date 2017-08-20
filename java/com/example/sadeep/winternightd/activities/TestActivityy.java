@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import com.example.sadeep.winternightd.R;
 import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.bottombar.BottomBar;
+import com.example.sadeep.winternightd.misc.NotebookIcon;
 
 public class TestActivityy extends AppCompatActivity {
 
@@ -23,9 +24,7 @@ public class TestActivityy extends AppCompatActivity {
         Globals.initialize(this);
         LinearLayout i= new LinearLayout(this);
         setContentView(i);
-        //LayoutInflater.from(this).inflate(R.layout.test,i,true);
-
-        //getWindow().setBackgroundDrawableResource(R.drawable.yyy);
+        i.addView(new NotebookIcon(this,"1f6e2"));
     }
 
     private void Click(View v) {

@@ -403,6 +403,13 @@ public class NoteHolderModes {
                 settingsUpper.dateTimeTextView.setTextColor(
                         noteHolder.getNote().noteState==STATE_EDITED ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);
             }
+
+            noteHolder.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    noteHolder.getNotebook().notebookActivity.enableBottomBarToGlassModeIfNecessary();
+                }
+            },200);
         }
 
         public static void onBind(NotebookViewHolderUtils.NoteHolder noteHolder) {

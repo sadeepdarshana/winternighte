@@ -13,8 +13,12 @@ import android.widget.TextView;
 
 import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.misc.Globals;
+import com.example.sadeep.winternightd.misc.NotebookIcon;
 import com.example.sadeep.winternightd.notebook.Notebook;
 import com.example.sadeep.winternightd.notebook.NotebookInfo;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * Created by Sadeep on 6/17/2017.
@@ -44,9 +48,9 @@ final class CatalogViewHolderUtils {
             super(context);
             this.context = context;
 
-            setBackgroundColor(Color.WHITE);
-            setLayoutParams(new RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-
+            setOrientation(VERTICAL);
+            //setBackgroundColor(Color.WHITE);
+            setLayoutParams(new RecyclerView.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
             setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -54,10 +58,27 @@ final class CatalogViewHolderUtils {
                 }
             });
 
+            LinearLayout l1 =new LinearLayout(getContext());
+            addView(l1);
+
+            NotebookIcon icon = new NotebookIcon(getContext(),"home");
+            l1.addView(icon);
+            LinearLayout.LayoutParams params = (LayoutParams) icon.getLayoutParams();
+            params.setMargins(Globals.dp2px*15,Globals.dp2px*15,Globals.dp2px*15,Globals.dp2px*15);
+
             title = new TextView(context);
-            title.setTextSize(TypedValue.COMPLEX_UNIT_FRACTION, Globals.defaultFontSize*1.5f);
-            title.setLayoutParams(new LinearLayout.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,100*Globals.dp2px));
-            addView(title);
+            title.setTextSize(TypedValue.COMPLEX_UNIT_FRACTION, Globals.defaultFontSize*1.2f);
+            //title.
+            title.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
+            ((LinearLayout.LayoutParams)title.getLayoutParams()).setMargins(0,Globals.dp2px*20,0,0);
+            l1.addView(title);
+
+            View bottomLine = new View(getContext());
+            LinearLayout.LayoutParams p1 = new LinearLayout.LayoutParams(MATCH_PARENT,1);
+            p1.setMargins(85*Globals.dp2px,0,0,0);
+            bottomLine.setLayoutParams(p1);
+            bottomLine.setBackgroundColor(0xffdddddd);
+            addView(bottomLine);
         }
 
         public void bind(NotebookInfo info){
@@ -82,7 +103,7 @@ final class CatalogViewHolderUtils {
         public Footer(Context context, Notebook notebook) {
             super(context);
 
-            LayoutParams params = new LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT,1);
+            LayoutParams params = new LayoutParams(MATCH_PARENT,1);
             setLayoutParams(params);
 
             notebook.bottomBar.addOnLayoutChangeListener(new OnLayoutChangeListener() {
