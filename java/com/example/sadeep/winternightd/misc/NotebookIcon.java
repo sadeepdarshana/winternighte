@@ -55,6 +55,16 @@ public class NotebookIcon extends CardView {
         init();
     }
 
+    private Drawable getIcon(String icon){
+        try {
+            InputStream is = getContext().getAssets().open("pic/" + icon+".png");
+            return Drawable.createFromResourceStream(getResources(), null, is, null);
+        }catch (Exception e){
+            return null;
+        }
+
+    }
+
     private void init() {
         setCardBackgroundColor(0xffebebeb);
         setCardElevation(0);
@@ -62,13 +72,16 @@ public class NotebookIcon extends CardView {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(Globals.dp2px * 50, Globals.dp2px * 50);
         setLayoutParams(params);
 
-        CardView.LayoutParams imageParams = new CardView.LayoutParams(Globals.dp2px * 30, Globals.dp2px * 30);
+        CardView.LayoutParams imageParams = new CardView.LayoutParams(Globals.dp2px * 32, Globals.dp2px * 32);
         imageParams.gravity = Gravity.CENTER;
+        imageParams.setMargins(Globals.dp2px*1,0,0,0);
         image.setLayoutParams(imageParams);
         addView(image);
 
         if(drawable!=null)image.setImageDrawable(drawable);
+    }
 
-
+    public void bindImage(String icon){
+        image.setImageDrawable(getIcon(icon));
     }
 }

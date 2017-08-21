@@ -26,7 +26,7 @@ public class CatalogCursorReader {
 
     public NotebookInfo getNotebookInfo(int position){
         cursor.moveToPosition(position);
-        return new NotebookInfo(cursor.getString(0),cursor.getString(1),cursor.getLong(2));
+        return new NotebookInfo(cursor.getString(0),cursor.getString(1),cursor.getLong(2),cursor.getString(3));
     }
 
     public Cursor getCursor(){

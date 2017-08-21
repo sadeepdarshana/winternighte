@@ -19,7 +19,7 @@ public class CatalogDataHandler {
 
 
     public static void createCatalogTable(){
-        String createSQL = "CREATE TABLE IF NOT EXISTS `catalog` (`notebookId` TEXT,`title` TEXT,`created` INTEGER);";
+        String createSQL = "CREATE TABLE IF NOT EXISTS `catalog` (`notebookId` TEXT,`title` TEXT,`created` INTEGER,`icon` TEXT);";
         DataConnection.execSQL(createSQL);
     }
 

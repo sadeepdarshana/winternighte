@@ -8,7 +8,11 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
 import com.example.sadeep.winternightd.R;
+import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.buttons.customizedbuttons.ToolbarButton;
+import com.example.sadeep.winternightd.field.fields.Field;
+import com.example.sadeep.winternightd.field.fields.IndentedField;
+import com.example.sadeep.winternightd.note.Note;
 import com.example.sadeep.winternightd.notebook.Notebook;
 import com.example.sadeep.winternightd.selection.XSelection;
 import com.example.sadeep.winternightd.spans.LiveFormattingStatus;
@@ -77,13 +81,14 @@ final public class Toolbar extends HorizontalScrollView{
 
     private void toolbarButtonClicked(int buttonId) {
 
-        ToolbarButton btn = toolbarButtons[buttonId];
+
 
         if(XSelection.isSelectionAvailable()){
             if (buttonId < 3) {
                 SpansController.formatRegion(XSelection.getSelectedNote(),XSelection.getSelectionStart(),XSelection.getSelectionEnd(),buttonId,LiveFormattingStatus.format[buttonId]*-1);
                 Notebook.suspendScrollTemporary();
             }
+
         }
 
         if (buttonId < 3) {
@@ -92,6 +97,16 @@ final public class Toolbar extends HorizontalScrollView{
             else if (LiveFormattingStatus.format[buttonId] == -1)
                 LiveFormattingStatus.format[buttonId] = 1;
             ToolbarController.refreshToolbars();
+        }
+
+        if(buttonId==4||buttonId==5){
+            Note note =((NotebookActivity)getContext()).activeNote;
+            IndentedField field = null;
+            try{
+                field = (IndentedField) note.getFocusedChild();
+            }catch (Exception e){}
+
+            if(field!=null)field.setIndent(field.getIndent()+buttonId*2-9);
         }
 
     }

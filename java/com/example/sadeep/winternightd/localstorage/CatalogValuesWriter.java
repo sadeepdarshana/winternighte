@@ -16,6 +16,7 @@ public class CatalogValuesWriter {
         values.put("created",info.createdTime);
         values.put("title",info.title);
         values.put("notebookId",info.notebookUUID);
+        values.put("icon",info.icon);
     }
 
     public static ContentValues generateContentValues(NotebookInfo info){

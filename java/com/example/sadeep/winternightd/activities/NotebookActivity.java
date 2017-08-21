@@ -1,5 +1,6 @@
 package com.example.sadeep.winternightd.activities;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -197,7 +198,14 @@ public class NotebookActivity extends NoteContainingActivity {
                 XClipboard.requestPaste(this, null);
                 break;
             case android.R.id.home:
-                XSelection.clearSelections();
+                if(XSelection.isSelectionAvailable())XSelection.clearSelections();
+                else {
+                    Intent intent = new Intent(this, CatalogActivity.class);
+                    startActivity(intent);
+                    overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+                    finish();
+
+                }
         }
     }
 
@@ -284,6 +292,13 @@ public class NotebookActivity extends NoteContainingActivity {
         if(AttachBoxManager.displayed){
             AttachBoxManager.tryDismiss();
             return true;
-        }else return super.onKeyUp(keyCode, event);
+        }
+        else {
+            Intent intent = new Intent(this, CatalogActivity.class);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
+            finish();
+            return true;
+        }
     }
 }

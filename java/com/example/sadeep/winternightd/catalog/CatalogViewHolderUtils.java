@@ -1,5 +1,6 @@
 package com.example.sadeep.winternightd.catalog;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -43,6 +44,7 @@ final class CatalogViewHolderUtils {
         private TextView title;
         private Context context;
         private NotebookInfo notebookInfo;
+        private NotebookIcon icon;
 
         public NotebookRootHolder(Context context) {
             super(context);
@@ -61,14 +63,14 @@ final class CatalogViewHolderUtils {
             LinearLayout l1 =new LinearLayout(getContext());
             addView(l1);
 
-            NotebookIcon icon = new NotebookIcon(getContext(),"home");
+            icon = new NotebookIcon(getContext(),"home");
             l1.addView(icon);
             LinearLayout.LayoutParams params = (LayoutParams) icon.getLayoutParams();
             params.setMargins(Globals.dp2px*15,Globals.dp2px*15,Globals.dp2px*15,Globals.dp2px*15);
 
             title = new TextView(context);
             title.setTextSize(TypedValue.COMPLEX_UNIT_FRACTION, Globals.defaultFontSize*1.2f);
-            //title.
+            title.setTextColor(0xff000000);
             title.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
             ((LinearLayout.LayoutParams)title.getLayoutParams()).setMargins(0,Globals.dp2px*20,0,0);
             l1.addView(title);
@@ -84,6 +86,7 @@ final class CatalogViewHolderUtils {
         public void bind(NotebookInfo info){
             title.setText(info.title);
             notebookInfo = info;
+            icon.bindImage(info.icon);
         }
 
         protected void onClick() {
@@ -93,6 +96,7 @@ final class CatalogViewHolderUtils {
             b.putString("title",notebookInfo.title);
             intent.putExtras(b);
             context.startActivity(intent);
+            ((Activity)getContext()).finish();
         }
 
     }
