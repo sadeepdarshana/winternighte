@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
@@ -10,16 +11,18 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:id="@+id/notebook_name"
-        android:hint="Your notebook name"
+        android:hint="notebook name"
         style="@style/Widget.AppCompat.EditText"
         android:textColor="@android:color/white"
         android:textColorHint="#ffcccccc" />
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
         android:text="Add"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_add_white_24dp"
         android:id="@+id/add"
+        app:fabSize="mini"
         style="@style/Widget.AppCompat.Button.Colored" />
 </LinearLayout>

@@ -23,7 +23,7 @@ import static com.example.sadeep.winternightd.notebook.NoteHolderModes.MODE_VIEW
  * Created by Sadeep on 6/17/2017.
  */
 
-final class NotebookViewHolderUtils {
+public final class NotebookViewHolderUtils {
     private NotebookViewHolderUtils(){}//static class
 
     public static final int VIEWTYPE_HEADER = 0;

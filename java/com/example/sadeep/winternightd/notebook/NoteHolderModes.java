@@ -25,6 +25,7 @@ import com.example.sadeep.winternightd.bottombar.ExtendedToolbar;
 import com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxOpener;
 import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.misc.NotebookItemChamber;
+import com.example.sadeep.winternightd.notebook.NotebookViewHolderUtils.NoteHolder;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -49,7 +50,7 @@ public class NoteHolderModes {
 
     public static class ModeView{
 
-        public static void setAsNoteHolderMode(final NotebookViewHolderUtils.NoteHolder noteHolder, boolean animate){
+        public static void setAsNoteHolderMode(final NoteHolder noteHolder, boolean animate){
             if(noteHolder.getMode()== MODE_VIEW)return;
 
 
@@ -108,14 +109,14 @@ public class NoteHolderModes {
             }
         }
 
-        public static void onBind(NotebookViewHolderUtils.NoteHolder noteHolder) {
+        public static void onBind(NoteHolder noteHolder) {
             ViewLower viewLower = (ViewLower) noteHolder.getLowerChamber().getChamberContent();
             viewLower.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
             viewLower.dateTimeTextView.setTextColor(
                     noteHolder.getNote().noteState==STATE_EDITED ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);
         }
 
-        public static void setAsActiveNote(NotebookViewHolderUtils.NoteHolder noteHolder) {
+        public static void setAsActiveNote(NoteHolder noteHolder) {
             noteHolder.getNotebook().noteHolderController.setAllNoteHoldersModeExcept(DEFAULT_MODE,noteHolder,true);
             noteHolder.getNotebook().editor.setActiveNote(noteHolder.getNote());
             noteHolder.getNotebook().notebookActivity.refreshBottomBar();
@@ -130,6 +131,12 @@ public class NoteHolderModes {
 
             public void setDateTime(long dateTime){
                 this.dateTime = dateTime;
+
+                try {
+                    NoteHolder noteHolder = (NoteHolder) getParent().getParent().getParent();
+                        dateTimeTextView.setTextColor(
+                                noteHolder.getNote().noteState == STATE_EDITED ? DATETIME_COLOR_SPECIAL : DATETIME_COLOR_DEFAULT);
+                }catch (Exception e){}
                 updateDateTimeTextView();
             }
 
@@ -180,7 +187,7 @@ public class NoteHolderModes {
     }
     public static class ModeEdit{
 
-        public static void setAsNoteHolderMode(NotebookViewHolderUtils.NoteHolder noteHolder, boolean animate){
+        public static void setAsNoteHolderMode(NoteHolder noteHolder, boolean animate){
             if(noteHolder.getMode()== MODE_EDIT)return;
 
             if(noteHolder.getNote()!=null)noteHolder.setVisibility(
@@ -197,7 +204,7 @@ public class NoteHolderModes {
             noteHolder.mode = MODE_EDIT;
         }
 
-        public static void onBind(NotebookViewHolderUtils.NoteHolder noteHolder) {
+        public static void onBind(NoteHolder noteHolder) {
 
         }
 
@@ -214,7 +221,7 @@ public class NoteHolderModes {
             public PopupWindow toolbarPopupWindow;
             CountDownTimer timer;
 
-            public EditLower(Context context, final NotebookViewHolderUtils.NoteHolder noteHolder) {
+            public EditLower(Context context, final NoteHolder noteHolder) {
                 super(context);
                 NotebookItemChamber.LayoutParams params1 = new NotebookItemChamber.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
                 setLayoutParams(params1);
@@ -349,7 +356,7 @@ public class NoteHolderModes {
     }
     public static class ModeSettings{
 
-        public static void setAsNoteHolderMode(final NotebookViewHolderUtils.NoteHolder noteHolder, boolean animate){
+        public static void setAsNoteHolderMode(final NoteHolder noteHolder, boolean animate){
             if(noteHolder.getMode()== MODE_SETTINGS)return;
             if(noteHolder.getNotebook().editor.getActiveNote()!=null)return;
 
@@ -412,14 +419,14 @@ public class NoteHolderModes {
             },200);
         }
 
-        public static void onBind(NotebookViewHolderUtils.NoteHolder noteHolder) {
+        public static void onBind(NoteHolder noteHolder) {
             SettingsUpper settingsUpper = (SettingsUpper) noteHolder.getLowerChamber().getChamberContent();
             settingsUpper.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
             settingsUpper.dateTimeTextView.setTextColor(
                     noteHolder.getNote().noteState==STATE_EDITED ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);
         }
 
-        public static void setAsActiveNote(NotebookViewHolderUtils.NoteHolder noteHolder) {
+        public static void setAsActiveNote(NoteHolder noteHolder) {
             noteHolder.getNotebook().noteHolderController.setAllNoteHoldersModeExcept(DEFAULT_MODE,noteHolder,true);
             noteHolder.getNotebook().editor.setActiveNote(noteHolder.getNote());
             noteHolder.getNotebook().notebookActivity.refreshBottomBar();
@@ -471,7 +478,7 @@ public class NoteHolderModes {
             }
         }
         public static class SettingsLower extends LinearLayout{
-            public SettingsLower(Context context, final NotebookViewHolderUtils.NoteHolder noteHolder) {
+            public SettingsLower(Context context, final NoteHolder noteHolder) {
                 super(context);
 
                 LinearLayout.LayoutParams params = new NotebookItemChamber.LayoutParams(MATCH_PARENT,WRAP_CONTENT);
