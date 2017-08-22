@@ -63,7 +63,7 @@
             android:id="@+id/cancel"
             app:fabSize="mini"
             style="@style/Widget.AppCompat.Button.Colored"
-            app:backgroundTint="#cccccc" />
+            app:backgroundTint="#bebebe" />
 
     </LinearLayout>
 </LinearLayout>

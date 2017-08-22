@@ -117,7 +117,7 @@ final public class XSelection {
 
     public static void clearSelections() {
         if(System.currentTimeMillis()<selectionTime+750)return;//// TODO: 8/8/2017 permanent solution
-        Notebook.suspendScrollTemporary();
+        if(XSelection.isSelectionAvailable())Notebook.suspendScrollTemporary();
 
         if(note!=null)((NoteContainingActivity)note.getContext()).setActionBarMode(0);
 
