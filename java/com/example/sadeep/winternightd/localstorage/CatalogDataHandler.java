@@ -2,6 +2,7 @@ package com.example.sadeep.winternightd.localstorage;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.example.sadeep.winternightd.localstorage.DataConnection;
 import com.example.sadeep.winternightd.notebook.NotebookInfo;
@@ -19,13 +20,13 @@ public class CatalogDataHandler {
 
 
     public static void createCatalogTable(){
-        String createSQL = "CREATE TABLE IF NOT EXISTS `catalog` (`notebookId` TEXT,`title` TEXT,`created` INTEGER,`icon` TEXT);";
+        String createSQL = "CREATE TABLE IF NOT EXISTS `catalog` (`notebookId` TEXT,`title` TEXT,`created` INTEGER,`icon` TEXT,PRIMARY KEY(`notebookId`));";
         DataConnection.execSQL(createSQL);
     }
 
     public static void createCatalogEntry(NotebookInfo info){
         ContentValues values = CatalogValuesWriter.generateContentValues(info);
-        DataConnection.writableDatabase().insert("catalog",null,values);
+        DataConnection.writableDatabase().insertWithOnConflict("catalog",null,values, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     public static void createNotebookTable(String notebookUUID){
@@ -37,4 +38,11 @@ public class CatalogDataHandler {
         createCatalogEntry(info);
         createNotebookTable(info.notebookUUID);
     }
+
+    public static void deleteNotebook(String  notebookUUID){
+        try {
+            DataConnection.writableDatabase().delete("catalog", "notebookId = '" + notebookUUID + "'", null);
+        }catch (Exception e){}
+    }
+
 }

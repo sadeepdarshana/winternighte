@@ -3,20 +3,27 @@ package com.example.sadeep.winternightd.catalog;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.sadeep.winternightd.R;
+import com.example.sadeep.winternightd.activities.CatalogActivity;
 import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.misc.NotebookIcon;
+import com.example.sadeep.winternightd.misc.Utils;
 import com.example.sadeep.winternightd.notebook.Notebook;
 import com.example.sadeep.winternightd.notebook.NotebookInfo;
+import com.example.sadeep.winternightd.temp.d;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -81,6 +88,36 @@ final class CatalogViewHolderUtils {
             bottomLine.setLayoutParams(p1);
             bottomLine.setBackgroundColor(0xffdddddd);
             addView(bottomLine);
+
+
+            final GestureDetector.SimpleOnGestureListener longTapDetector = new GestureDetector.SimpleOnGestureListener(){
+                @Override
+                public void onLongPress(MotionEvent e) {
+                    super.onLongPress(e);
+                    //todo
+                    CatalogActivity activity = (CatalogActivity)getContext();
+                    Utils.showKeyboard(title);
+                    activity.displayAddEditDialog(notebookInfo,true);
+                }
+            };
+
+            final GestureDetector detector = new GestureDetector(longTapDetector);
+
+            setOnTouchListener(new OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    return detector.onTouchEvent(event);
+                }
+
+
+            });
+
+            int[] attrs = new int[]{R.attr.selectableItemBackground};
+            TypedArray typedArray = context.obtainStyledAttributes(attrs);
+            int backgroundResource = typedArray.getResourceId(0, 0);
+            setBackgroundResource(backgroundResource);
+            typedArray.recycle();
+
         }
 
         public void bind(NotebookInfo info){

@@ -1,6 +1,7 @@
 package com.example.sadeep.winternightd.notebook;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -33,6 +34,15 @@ public class NotebookItem  extends SexyCard {
         lowerChamber = (NotebookItemChamber) notebookItemInnerLayout.findViewById(R.id.lowerchamber);
         upperChamber = (NotebookItemChamber) notebookItemInnerLayout.findViewById(R.id.upperchamber);
         noteSpace = (LinearLayout) notebookItemInnerLayout.findViewById(R.id.notespace);
+
+
+        notebookItemInnerLayout.setClickable(true);
+        int[] attrs = new int[]{R.attr.selectableItemBackground};
+        TypedArray typedArray = context.obtainStyledAttributes(attrs);
+        int backgroundResource = typedArray.getResourceId(0, 0);
+        notebookItemInnerLayout.setBackgroundResource(backgroundResource);
+        typedArray.recycle();
+
 
 
     }

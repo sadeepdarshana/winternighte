@@ -72,6 +72,10 @@ public class Note extends LinearLayout {
         setClipChildren(false);
 
         this.isEditable = isEditable;
+
+
+
+
     }
 
 

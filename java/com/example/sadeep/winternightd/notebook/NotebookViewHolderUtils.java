@@ -1,6 +1,7 @@
 package com.example.sadeep.winternightd.notebook;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
+import com.example.sadeep.winternightd.R;
 import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.bottombar.BottomBar;
 import com.example.sadeep.winternightd.misc.Globals;
@@ -58,6 +60,7 @@ public final class NotebookViewHolderUtils {
             setLayoutParams(params);
 
             notebook.noteHolderController.addNoteHolder(this);
+
         }
 
 
@@ -68,6 +71,7 @@ public final class NotebookViewHolderUtils {
             if(note.getParent()!=null)((ViewGroup)note.getParent()).removeView(note);
             getNoteSpace().addView(note);
             onBind();
+
         }
 
         private void onBind() {

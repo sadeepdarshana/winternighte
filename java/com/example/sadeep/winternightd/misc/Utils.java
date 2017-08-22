@@ -9,6 +9,8 @@ import android.view.inputmethod.InputMethodManager;
 
 import com.example.sadeep.winternightd.spans.RichText;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 /**
  * Created by Sadeep on 7/5/2017.
  */
@@ -29,8 +31,17 @@ public class Utils {
         return view.getMeasuredHeight();
     }
 
+    public static void showKeyboard(View view){
+
+        InputMethodManager inputMethodManager =
+                (InputMethodManager)view.getContext().getSystemService(INPUT_METHOD_SERVICE);
+        inputMethodManager.toggleSoftInputFromWindow(
+                view.getApplicationWindowToken(),
+                InputMethodManager.SHOW_FORCED, 0);
+    }
+
     public static void hideKeyboard(Context activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
         View view = ((Activity)activity).getCurrentFocus();
         //If no view currently has focus, create a new one, just so we can grab a window token from it

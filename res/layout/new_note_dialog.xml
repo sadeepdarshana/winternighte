@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="7dp"/>
+
+    <ImageButton
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/image"
+        android:layout_gravity="center"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:ems="10"
         android:id="@+id/notebook_name"
         android:hint="notebook name"
@@ -16,13 +26,44 @@
         android:textColor="@android:color/white"
         android:textColorHint="#ffcccccc" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:text="Add"
-        android:layout_width="0dp"
-        android:layout_weight="1"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_add_white_24dp"
-        android:id="@+id/add"
-        app:fabSize="mini"
-        style="@style/Widget.AppCompat.Button.Colored" />
+        android:layout_gravity="center">
+
+        <android.support.design.widget.FloatingActionButton
+            android:text="Add"
+            android:layout_margin="7dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_done_white_24dp"
+            android:id="@+id/add"
+            app:fabSize="mini"
+            style="@style/Widget.AppCompat.Button.Colored" />
+        <android.support.design.widget.FloatingActionButton
+            android:text="Add"
+            android:layout_margin="7dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_delete_white_24dp"
+            android:id="@+id/delete"
+            app:fabSize="mini"
+            style="@style/Widget.AppCompat.Button.Colored"
+            android:visibility="gone"
+            app:backgroundTint="#aa4444" />
+        <android.support.design.widget.FloatingActionButton
+            android:text="Add"
+            android:layout_margin="7dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_clear_white_24dp"
+            android:id="@+id/cancel"
+            app:fabSize="mini"
+            style="@style/Widget.AppCompat.Button.Colored"
+            app:backgroundTint="#cccccc" />
+
+    </LinearLayout>
 </LinearLayout>

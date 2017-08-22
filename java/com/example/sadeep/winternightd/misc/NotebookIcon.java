@@ -56,13 +56,16 @@ public class NotebookIcon extends CardView {
     }
 
     private Drawable getIcon(String icon){
+        return getIcon(getContext(),icon);
+    }
+
+    public static Drawable getIcon(Context context, String icon){
         try {
-            InputStream is = getContext().getAssets().open("pic/" + icon+".png");
-            return Drawable.createFromResourceStream(getResources(), null, is, null);
+            InputStream is = context.getAssets().open("pic/" + icon+".png");
+            return Drawable.createFromResourceStream(context.getResources(), null, is, null);
         }catch (Exception e){
             return null;
         }
-
     }
 
     private void init() {
