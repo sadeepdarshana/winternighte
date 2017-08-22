@@ -3,18 +3,22 @@ package com.example.sadeep.winternightd.bottombar;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.CountDownTimer;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 import com.example.sadeep.winternightd.R;
+import com.example.sadeep.winternightd.activities.CatalogActivity;
 import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.animation.XAnimation;
 import com.example.sadeep.winternightd.note.Note;
 import com.example.sadeep.winternightd.note.NoteFactory;
 import com.example.sadeep.winternightd.misc.Utils;
+import com.example.sadeep.winternightd.temp.d;
 
 /**
  * Created by Sadeep on 7/10/2017.
@@ -70,7 +74,6 @@ public class NewNoteBar  extends LinearLayout{
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onSendClick(v);
             }
         });
 
@@ -86,6 +89,35 @@ public class NewNoteBar  extends LinearLayout{
 
             public void onFinish(){}
         }.start();
+
+
+        final GestureDetector.SimpleOnGestureListener longTapDetector = new GestureDetector.SimpleOnGestureListener(){
+            @Override
+            public void onLongPress(MotionEvent e) {
+                super.onLongPress(e);
+
+                onSendLongClick(send);
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+
+                onSendClick(send);
+                return super.onSingleTapUp(e);
+            }
+        };
+
+        final GestureDetector detector = new GestureDetector(getContext(),longTapDetector);
+
+        send.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return detector.onTouchEvent(event);
+            }
+
+
+        });
+
     }
 
     protected void onNoteHasContent() {
@@ -116,6 +148,10 @@ public class NewNoteBar  extends LinearLayout{
     }
 
     protected void onSendClick(View v) {
+
+    }
+
+    protected void onSendLongClick(View view) {
 
     }
 

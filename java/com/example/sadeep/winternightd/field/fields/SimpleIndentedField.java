@@ -32,7 +32,10 @@ public class SimpleIndentedField extends IndentedField implements SingleText {
 
     public static final int classFieldType = 1422342676;
 
+
     protected EditTextView editTextView;  //the main View containing the text
+
+
 
     public SimpleIndentedField(Context context) {
         this(false,context);

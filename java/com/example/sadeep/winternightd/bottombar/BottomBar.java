@@ -79,6 +79,12 @@ public class BottomBar extends LinearLayout{
             }
 
             @Override
+            protected void onSendLongClick(View view) {
+                BottomBar.this.onSendLongClick(view);
+
+            }
+
+            @Override
             protected void onAttachClick(View v) {
                 BottomBar.this.onAttachClick(v);
             }
@@ -109,6 +115,9 @@ public class BottomBar extends LinearLayout{
     }
 
     protected void onSendClick(View v) {
+
+    }
+    protected void onSendLongClick(View v) {
 
     }
 

@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Spannable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.example.sadeep.winternightd.attachbox.OnAttachBoxItemClick;
 import com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxOpener;
 import com.example.sadeep.winternightd.clipboard.XClipboard;
 import com.example.sadeep.winternightd.dumping.RawFieldDataStream;
+import com.example.sadeep.winternightd.field.FieldFactory;
 import com.example.sadeep.winternightd.field.fields.SimpleIndentedField;
 import com.example.sadeep.winternightd.localstorage.DataConnection;
 import com.example.sadeep.winternightd.misc.Utils;
@@ -28,7 +30,10 @@ import com.example.sadeep.winternightd.notebook.Notebook;
 import com.example.sadeep.winternightd.bottombar.BottomBar;
 import com.example.sadeep.winternightd.selection.XSelection;
 import com.example.sadeep.winternightd.misc.NoteContainingActivityRootView;
+import com.example.sadeep.winternightd.spans.LiveFormattingStatus;
+import com.example.sadeep.winternightd.spans.SpansController;
 import com.example.sadeep.winternightd.temp.d;
+import com.example.sadeep.winternightd.toolbar.ToolbarController;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -104,6 +109,36 @@ public class NotebookActivity extends NoteContainingActivity {
             @Override
             protected void onSendClick(View v) {
                 sendClick(v);
+            }
+
+            @Override
+            protected void onSendLongClick(View v) {
+                Note note =getNote();
+                if(note.getFocusedChild()!=note.getFieldAt(0) ||
+                        note.getFieldAt(0).getFieldType()!=SimpleIndentedField.classFieldType)return;
+
+                SimpleIndentedField field = (SimpleIndentedField)note.getFieldAt(0);
+                CharSequence seq = field.getMainTextBox().getText();
+
+                LiveFormattingStatus.format[0] = 1;
+                LiveFormattingStatus.format[2] = 1;
+                SpansController.updateSpansOnRegion((Spannable) seq,0,seq.length());
+                LiveFormattingStatus.format[0] = -1;
+                LiveFormattingStatus.format[2] = -1;
+                ToolbarController.refreshToolbars();
+
+                CharSequence seqnew = android.text.TextUtils.concat(seq,System.getProperty("line.separator"));
+
+
+
+                field.getMainTextBox().setText(seqnew);
+
+                SimpleIndentedField newField = (SimpleIndentedField)
+                        FieldFactory.createNewField(getContext(),SimpleIndentedField.classFieldType,true);
+                note.addView(newField,1);
+                newField.getMainTextBox().requestFocus();
+
+
             }
         };
 
