@@ -324,6 +324,13 @@ public class NotebookActivity extends NoteContainingActivity {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(keyCode!=KeyEvent.KEYCODE_BACK)return false;
+
+        if(XSelection.isSelectionAvailable()){
+            XSelection.clearSelections();
+            return true;
+        }
+
         if(AttachBoxManager.displayed){
             AttachBoxManager.tryDismiss();
             return true;
