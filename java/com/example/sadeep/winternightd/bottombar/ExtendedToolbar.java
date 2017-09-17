@@ -34,7 +34,7 @@ public class ExtendedToolbar extends LinearLayout{
     public ExtendedToolbar(Context context, boolean buttonVisibility, boolean toolbarVisibility, boolean cancelButton) {
         super(context);
 
-        //setBackgroundColor(0xaaebebeb);
+        setBackgroundColor(0xff0033ff);
         setClipChildren(false);
 
         LayoutInflater.from(context).inflate(R.layout.extended_toolbar,this,true);

@@ -24,10 +24,6 @@ public class NotebookItemChamber extends LinearLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public NotebookItemChamber(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-    }
-
     public void setChamberContent(View content, boolean animate){
         emptyChamber(animate);
         if(content==null)return;

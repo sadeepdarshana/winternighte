@@ -47,7 +47,7 @@ public class CatalogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.catalog_activity);
-
+        //if(true)return;
         String destPath = getFilesDir().getPath();
         String dbpath =  destPath.substring(0, destPath.lastIndexOf("/")) + "/databases";;
 

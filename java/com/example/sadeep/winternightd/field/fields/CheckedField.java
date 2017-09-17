@@ -82,8 +82,6 @@ public class CheckedField extends SimpleIndentedField {
         checkedCheckView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked)checkedCheckView.setButtonTintList(new ColorStateList(new int[][]{new int[]{0}}, new int[]{Color.parseColor("#FF26A69A")}));
-                else checkedCheckView.setButtonTintList(new ColorStateList(new int[][]{new int[]{0}}, new int[]{Color.parseColor("#f59d22")}));
 
             }
         });

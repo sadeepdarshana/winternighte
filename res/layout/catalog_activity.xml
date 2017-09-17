@@ -29,6 +29,5 @@
         android:layout_margin="14dp"
         android:elevation="1dp"
         android:id="@+id/button"
-        style="@style/Widget.AppCompat.Button.Colored"
         android:onClick="displayFeedbackDialog"/>
 </RelativeLayout>
