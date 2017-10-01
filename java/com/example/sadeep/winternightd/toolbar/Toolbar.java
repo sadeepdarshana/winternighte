@@ -1,6 +1,7 @@
 package com.example.sadeep.winternightd.toolbar;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,6 +78,7 @@ final public class Toolbar extends HorizontalScrollView{
         }
 
         updateStatus(LiveFormattingStatus.format);
+
     }
 
     private void toolbarButtonClicked(int buttonId) {

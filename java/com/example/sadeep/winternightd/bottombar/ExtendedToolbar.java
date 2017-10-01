@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import com.example.sadeep.winternightd.R;
 import com.example.sadeep.winternightd.animation.XAnimationListener;
 import com.example.sadeep.winternightd.animation.XAnimation;
+import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.misc.Utils;
 import com.example.sadeep.winternightd.toolbar.Toolbar;
 import com.example.sadeep.winternightd.toolbar.ToolbarController;
@@ -34,7 +35,7 @@ public class ExtendedToolbar extends LinearLayout{
     public ExtendedToolbar(Context context, boolean buttonVisibility, boolean toolbarVisibility, boolean cancelButton) {
         super(context);
 
-        setBackgroundColor(0xff0033ff);
+        setBackgroundColor(0xff003300);
         setClipChildren(false);
 
         LayoutInflater.from(context).inflate(R.layout.extended_toolbar,this,true);
@@ -51,9 +52,9 @@ public class ExtendedToolbar extends LinearLayout{
         ToolbarController.registerToolbar(toolbar);
         toolbarContainer.addView(this.toolbar);
 
-        attachWidth = Utils.getWidth(attach);
-        sendWidth = Utils.getWidth(send);
-        toolbarHeight = Utils.getHeight(this.toolbar);
+        attachWidth =31* Globals.dp2px;
+        sendWidth =31* Globals.dp2px;
+        toolbarHeight =31* Globals.dp2px;
 
         setButtonsVisibility(buttonVisibility,false);
         setToolbarVisibility(toolbarVisibility,false);

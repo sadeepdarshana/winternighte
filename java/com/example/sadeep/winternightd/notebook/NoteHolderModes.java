@@ -259,6 +259,7 @@ public class NoteHolderModes {
                     }
                 };
                 addView(extendedToolbar);
+                extendedToolbar.setLayoutParams( new NotebookItemChamber.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
 
                 ExtendedToolbar popupToolbar = new ExtendedToolbar(context,true,true, true){
                     @Override
