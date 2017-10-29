@@ -14,6 +14,8 @@ import com.example.sadeep.winternightd.localstorage.NotebookDataHandler;
  * Created by Sadeep on 7/13/2017.
  */
 
+
+
 public class Catalog extends RecyclerView {
 
     private CatalogDataHandler dataHandler;
