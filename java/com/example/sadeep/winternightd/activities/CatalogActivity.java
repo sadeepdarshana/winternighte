@@ -59,9 +59,9 @@ public class CatalogActivity extends AppCompatActivity {
 
 
 
-        Globals.initialize(this);
-        DataConnection.initialize(this);
-        XClipboard.initialize(this);
+        //Globals.initialize(this);
+        //DataConnection.initialize(this);
+        //XClipboard.initialize(this);
 
         RelativeLayout catalogspace = (RelativeLayout) findViewById(R.id.catalogspace);
         CatalogDataHandler.createCatalogTable();
