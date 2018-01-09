@@ -1,27 +1,35 @@
 package com.example.sadeep.winternightd.note;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.sadeep.winternightd.R;
+import com.example.sadeep.winternightd.activities.NoteContainingActivity;
 import com.example.sadeep.winternightd.attachbox.AttachBoxManager;
 import com.example.sadeep.winternightd.dumping.FieldDataStream;
 import com.example.sadeep.winternightd.field.FieldFactory;
 import com.example.sadeep.winternightd.field.fields.BulletedField;
 import com.example.sadeep.winternightd.field.fields.CheckedField;
+import com.example.sadeep.winternightd.field.fields.ImageField;
 import com.example.sadeep.winternightd.field.fields.NumberedField;
 import com.example.sadeep.winternightd.notebook.Notebook;
 import com.example.sadeep.winternightd.notebook.NotebookViewHolderUtils;
 import com.example.sadeep.winternightd.selection.XSelection;
+import com.example.sadeep.winternightd.temp.d;
 import com.example.sadeep.winternightd.textboxes.XEditText;
 import com.example.sadeep.winternightd.spans.SpansFactory;
 import com.example.sadeep.winternightd.field.fields.Field;
@@ -208,6 +216,28 @@ public class Note extends LinearLayout {
 
             addView(field,newFieldPos);
             field.getMainTextBox().requestFocus();
+        }
+
+        if(attachButtonId == AttachBoxManager.ATTACH_BUTTON_ID_CAMERA){
+            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            ((Activity)getContext()).startActivityForResult(cameraIntent, 1888);
+
+            ((NoteContainingActivity)getContext()).onActivityResultListener= new PreferenceManager.OnActivityResultListener() {
+                @Override
+                public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+                    ((NoteContainingActivity)Note.this.getContext()).onActivityResultListener=null;
+                    d.wow((NoteContainingActivity)Note.this.getContext());
+
+
+                    if (requestCode == 1888 && resultCode == Activity.RESULT_OK) {
+                        Bitmap photo = (Bitmap) data.getExtras().get("data");
+                        CursorPosition cpos = getCurrentCursorPosition();
+                        ImageField imageField = new ImageField(Note.this.getContext(),photo);
+                        Note.this.addView(imageField,cpos.fieldIndex);
+                    }
+                    return true;
+                }
+            };
         }
     }
 

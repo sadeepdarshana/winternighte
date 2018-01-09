@@ -1,8 +1,10 @@
 package com.example.sadeep.winternightd.activities;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -18,6 +20,7 @@ import com.example.sadeep.winternightd.selection.XSelection;
  */
 
 public abstract class NoteContainingActivity extends AppCompatActivity {
+
 
 
     public static final int ACTIONBAR_NORMAL = 0;
@@ -76,6 +79,11 @@ public abstract class NoteContainingActivity extends AppCompatActivity {
         }
     }
 
+
+    public PreferenceManager.OnActivityResultListener onActivityResultListener;
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(onActivityResultListener!=null)onActivityResultListener.onActivityResult(requestCode,resultCode,data);
+    }
 
 
     public void onRootLayoutSizeChanged(){}

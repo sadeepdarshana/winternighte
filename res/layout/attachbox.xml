@@ -72,7 +72,7 @@
             grid:layout_columnWeight="1"
             android:paddingTop="7dp"
             android:paddingBottom="7dp"
-            android:visibility="gone"
+            android:visibility="visible"
             android:src="@drawable/attachbox_camera" />
 
     </android.support.v7.widget.GridLayout>
