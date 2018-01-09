@@ -60,7 +60,7 @@ public abstract class NoteContainingActivity extends AppCompatActivity {
 
             getSupportActionBar().setBackgroundDrawable(getActionBarDrawable());
 
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
             invalidateOptionsMenu();
         }

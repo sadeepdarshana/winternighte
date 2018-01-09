@@ -49,8 +49,8 @@ public class NotebookActivity extends NoteContainingActivity {
     public Note newNote;
     public Note activeNote;
 
-    private String notebookUUID="";
-    private String title="";
+    private String notebookUUID="b9bafe0681be8430f860f6b47a2823a97";
+    private String title="WhatsNote";
 
     LinearLayout bottombarSpace;
     private LinearLayout notebookSpace;
@@ -66,6 +66,7 @@ public class NotebookActivity extends NoteContainingActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        /*
         Bundle b = getIntent().getExtras();
         if(b != null) {
             notebookUUID = b.getString("notebookUUID");
@@ -74,7 +75,7 @@ public class NotebookActivity extends NoteContainingActivity {
         else {
             notebookUUID = "b237e56fe938a4e80b75b1be38f58b06e";
             title = "Home";
-        }
+        }*/
 
         setTheme(R.style.notebook_activity_theme);
         setContentView(R.layout.notebook_activity);
@@ -153,7 +154,7 @@ public class NotebookActivity extends NoteContainingActivity {
         activeNote = newNote;
 
         //getWindow().setBackgroundDrawableResource(R.drawable.yyy);
-        setActionBarMode(NoteContainingActivity.ACTIONBAR_NORMAL);
+        //setActionBarMode(NoteContainingActivity.);
 
         final boolean[] notebookScrolledToBottom = {false};//'int[1]' because java syntax doesn't allow 'int' here
         rootView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
@@ -239,7 +240,6 @@ public class NotebookActivity extends NoteContainingActivity {
                     startActivity(intent);
                     overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
                     finish();
-
                 }
         }
     }
@@ -335,12 +335,12 @@ public class NotebookActivity extends NoteContainingActivity {
             AttachBoxManager.tryDismiss();
             return true;
         }
-        else {
+        else {/*
             Intent intent = new Intent(this, CatalogActivity.class);
             startActivity(intent);
             overridePendingTransition(android.R.anim.slide_in_left,android.R.anim.slide_out_right);
-            finish();
-            return true;
+            finish();*/
+            return super.onKeyUp(keyCode,event);
         }
     }
 }
