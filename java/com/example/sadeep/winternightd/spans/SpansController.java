@@ -146,9 +146,11 @@ public class SpansController {
             for(int c=0; c<3;c++)if(spansLists.get(c).size()!=0)spanStatus[c]=1;
         }else {
             for (int i = start.fieldIndex + 1; i < end.fieldIndex; i++) {
-                Spannable text = (Spannable) ((SimpleIndentedField) note.getFieldAt(i)).getMainTextBox().getText();
-                ArrayList<ArrayList<SpanWrapper>> spansLists = getSortedSpanWrappers(text, 0, text.length());
-                for (int c = 0; c < 3; c++) if (spansLists.get(c).size() != 0) spanStatus[c] = 1;
+                try{
+                    Spannable text = (Spannable) ((SimpleIndentedField) note.getFieldAt(i)).getMainTextBox().getText();
+                    ArrayList<ArrayList<SpanWrapper>> spansLists = getSortedSpanWrappers(text, 0, text.length());
+                    for (int c = 0; c < 3; c++) if (spansLists.get(c).size() != 0) spanStatus[c] = 1;
+                }catch (Exception e){}
             }
 
 

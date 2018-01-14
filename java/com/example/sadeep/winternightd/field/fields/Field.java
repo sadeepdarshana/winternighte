@@ -83,7 +83,6 @@ public abstract class Field extends LinearLayout {
 
             @Override
             public boolean onDown(MotionEvent e) {
-                XSelection.clearSelections();
                 return false;
             }
 
@@ -92,6 +91,8 @@ public abstract class Field extends LinearLayout {
 
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
+
+                XSelection.clearSelections();
                 return false;
             }
 

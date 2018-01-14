@@ -2,12 +2,15 @@ package com.example.sadeep.winternightd.misc;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 
 import com.example.sadeep.winternightd.spans.RichText;
+
+import java.io.ByteArrayOutputStream;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -18,6 +21,23 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 public class Utils {
     public static CharSequence duplicateCharSequence(CharSequence seq){
         return RichText.generateRichText((Spanned) seq).getCharSequence();
+    }
+
+    public static byte[] bitmapToByteArray(Bitmap bmp){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        return stream.toByteArray();
+    }
+
+    public static int[] byteArrayToIntArray(byte buf[]) {
+        int intArr[] = new int[buf.length / 4];
+        int offset = 0;
+        for(int i = 0; i < intArr.length; i++) {
+            intArr[i] = (buf[3 + offset] & 0xFF) | ((buf[2 + offset] & 0xFF) << 8) |
+                    ((buf[1 + offset] & 0xFF) << 16) | ((buf[0 + offset] & 0xFF) << 24);
+            offset += 4;
+        }
+        return intArr;
     }
 
     public static int getWidth(View view){

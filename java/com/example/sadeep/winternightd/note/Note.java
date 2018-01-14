@@ -233,7 +233,9 @@ public class Note extends LinearLayout {
                     if (requestCode == 1888 && resultCode == Activity.RESULT_OK) {
                         Bitmap photo = (Bitmap) data.getExtras().get("data");
                         CursorPosition cpos = getCurrentCursorPosition();
-                        ImageField imageField = new ImageField(Note.this.getContext(),photo);
+                        if(cpos==null)cpos= new CursorPosition(0,0);
+                        ImageField imageField = (ImageField) FieldFactory.createNewField(Note.this.getContext(),ImageField.classFieldType,true);
+                        imageField.setImageBitmap(photo);
                         Note.this.addView(imageField,cpos.fieldIndex+1);
                         Note.this.addView(FieldFactory.createNewField(Note.this.getContext(),SimpleIndentedField.classFieldType,true));
                     }
