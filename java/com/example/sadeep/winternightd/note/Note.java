@@ -218,6 +218,7 @@ public class Note extends LinearLayout {
             field.getMainTextBox().requestFocus();
         }
 
+
         if(attachButtonId == AttachBoxManager.ATTACH_BUTTON_ID_CAMERA){
             Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             ((Activity)getContext()).startActivityForResult(cameraIntent, 1888);
@@ -226,14 +227,15 @@ public class Note extends LinearLayout {
                 @Override
                 public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
                     ((NoteContainingActivity)Note.this.getContext()).onActivityResultListener=null;
-                    d.wow((NoteContainingActivity)Note.this.getContext());
+                    //d.wow((NoteContainingActivity)Note.this.getContext());
 
 
                     if (requestCode == 1888 && resultCode == Activity.RESULT_OK) {
                         Bitmap photo = (Bitmap) data.getExtras().get("data");
                         CursorPosition cpos = getCurrentCursorPosition();
                         ImageField imageField = new ImageField(Note.this.getContext(),photo);
-                        Note.this.addView(imageField,cpos.fieldIndex);
+                        Note.this.addView(imageField,cpos.fieldIndex+1);
+                        Note.this.addView(FieldFactory.createNewField(Note.this.getContext(),SimpleIndentedField.classFieldType,true));
                     }
                     return true;
                 }

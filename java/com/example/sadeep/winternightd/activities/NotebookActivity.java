@@ -35,6 +35,12 @@ import com.example.sadeep.winternightd.spans.SpansController;
 import com.example.sadeep.winternightd.temp.d;
 import com.example.sadeep.winternightd.toolbar.ToolbarController;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
@@ -65,6 +71,16 @@ public class NotebookActivity extends NoteContainingActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        String destPath = getFilesDir().getPath();
+        String dbpath =  destPath.substring(0, destPath.lastIndexOf("/")) + "/databases";;
+
+        try{
+            if(!new File(dbpath+"/winternightd.db").exists()) copyDataBase(dbpath);
+        }catch (Exception e) {
+
+        }
 
         /*
         Bundle b = getIntent().getExtras();
@@ -145,6 +161,7 @@ public class NotebookActivity extends NoteContainingActivity {
 
         bottombarSpace.addView(newNoteBottomBar);
 
+
         notebook = new Notebook(this,notebookUUID, newNoteBottomBar);
         notebook.setClipToPadding(false);
         notebookSpace.addView(notebook);
@@ -203,7 +220,29 @@ public class NotebookActivity extends NoteContainingActivity {
             }
         }.start();
     }
+    private void copyDataBase(String dbPath){
+        try{
+            InputStream assestDB = getAssets().open("databases/winternightd.db");
 
+            final File newFile = new File(dbPath);
+            newFile.mkdir();
+
+            OutputStream appDB = new FileOutputStream(dbPath+"/winternightd.db",false);
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = assestDB.read(buffer)) > 0) {
+                appDB.write(buffer, 0, length);
+            }
+
+            appDB.flush();
+            appDB.close();
+            assestDB.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+
+    }
     public void refreshBottomBar(){
         if(notebook.editor.getActiveNote()==null){
             if(!newNoteBottomBar.layoutShown) {

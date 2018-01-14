@@ -65,7 +65,7 @@ public class NoteHolderModes {
             noteHolder.getUpperChamber().setChamberContent(viewUpper,animate);
             noteHolder.getLowerChamber().setChamberContent(viewLower,animate);
 
-            noteHolder.setRadius(Globals.dp2px*4);
+            noteHolder.setRadius(Globals.dp2px*2);
 
             final GestureDetector gestureDetector = new GestureDetector(noteHolder.getContext(), new GestureDetector.SimpleOnGestureListener() {
                 @Override
@@ -374,7 +374,7 @@ public class NoteHolderModes {
             noteHolder.getUpperChamber().setChamberContent(settingsUpper,animate);
             noteHolder.getLowerChamber().setChamberContent(settingsLower,animate);
 
-            noteHolder.setRadius(Globals.dp2px*4);
+            noteHolder.setRadius(Globals.dp2px*2);
 
             final GestureDetector gestureDetector = new GestureDetector(noteHolder.getContext(), new GestureDetector.SimpleOnGestureListener() {
                 @Override
