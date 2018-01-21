@@ -25,13 +25,13 @@ public class NotebookCursorReader {
 
     public FieldDataStream getFieldDataStream(int position){
         cursor.moveToPosition(position);
-        RawFieldDataStream rawStream = new RawFieldDataStream(cursor.getString(1), cursor.getString(2), cursor.getBlob(3), cursor.getString(4), cursor.getBlob(5));
+        RawFieldDataStream rawStream = new RawFieldDataStream(cursor.getString(1), cursor.getString(2), cursor.getBlob(3), cursor.getString(4),cursor.getBlob(5), cursor.getBlob(6));
         return new FieldDataStream(rawStream);
     }
 
     public NoteInfo getNoteInfo(int position){
         cursor.moveToPosition(position);
-        return new NoteInfo(cursor.getString(0),cursor.getLong(7),cursor.getLong(6),cursor.getString(8));
+        return new NoteInfo(cursor.getString(0),cursor.getLong(8),cursor.getLong(7),cursor.getString(9));
     }
 
     public Cursor getCursor(){

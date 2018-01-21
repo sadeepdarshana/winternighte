@@ -67,15 +67,22 @@ public class ImageField extends IndentedField {
     public void writeToFieldDataStream(FieldDataStream stream) {
         super.writeToFieldDataStream(stream);
 
-        int[] arr = Utils.byteArrayToIntArray(Utils.bitmapToByteArray(bmp));
+        byte[] arr = Utils.bitmapToByteArray(bmp);
 
-        stream.putInt(false,arr.length);
-        for(int c=0;c<arr.length;c++)stream.putInt(false,arr[c]);
+        stream.putInt(false,arr.length);        // 0 size of int array
+
+        stream.putByteArray(arr);   //1 bytearray
     }
     @Override
     public void readFromFieldDataStream(FieldDataStream stream) {
         super.readFromFieldDataStream(stream);
-        setIndent(stream.getInt(false));                              //0 indent
+
+        int size = stream.getInt(false);    // 0 size of int array
+
+        byte[] arr = stream.getByteArray(size); //1 bytearray
+
+        setImageBitmap(Utils.byteArrayToBitmap(arr));
+
     }
 
 }

@@ -4,6 +4,8 @@ package com.example.sadeep.winternightd.dumping;
  * Created by Sadeep on 6/15/2017.
  */
 
+import com.example.sadeep.winternightd.misc.Utils;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -29,13 +31,16 @@ public class RawFieldDataStream {
     public byte[]  ints0;
     public String  ints1;
 
+    public byte[] bindata;
+
     public byte[]  fieldTypes;
 
-    public RawFieldDataStream(String strings0, String strings1, byte[] ints0,String ints1, byte[] fieldTypes){
+    public RawFieldDataStream(String strings0, String strings1, byte[] ints0,String ints1,byte[]bindata, byte[] fieldTypes){
         this.strings[0] = strings0;
         this.strings[1] = strings1;
         this.ints0 = ints0;
         this.ints1 = ints1;
+        this.bindata = bindata;
         this.fieldTypes = fieldTypes;
     }
 
@@ -45,6 +50,8 @@ public class RawFieldDataStream {
 
         ints0 = byteArrayFromIntegers(stream.ints[0]);
         ints1 = delimitedStringFromElements(stream.ints[1]);
+
+        bindata = Utils.toByteArray(stream.bindata);
 
         fieldTypes = byteArrayFromIntegers(stream.fieldTypes);
     }

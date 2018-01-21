@@ -5,7 +5,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clipChildren="false"
-    android:background="#ffebebeb"
+    android:background="#00ebebeb"
     >
     <LinearLayout
         android:orientation="vertical"

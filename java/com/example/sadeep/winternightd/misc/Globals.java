@@ -21,7 +21,7 @@ final public  class Globals {
 
     public static void initialize(Context context){
         dp2px = (int)((float)context.getResources().getDisplayMetrics().densityDpi / (float) DisplayMetrics.DENSITY_DEFAULT);
-        defaultFontSize = new EditText(context).getTextSize();
+        defaultFontSize = new EditText(context).getTextSize()/1.1f;
     }
 
 }

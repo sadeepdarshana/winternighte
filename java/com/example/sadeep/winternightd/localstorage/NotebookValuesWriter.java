@@ -24,6 +24,7 @@ public class NotebookValuesWriter {
         values.put("strings1",stream.strings[1]);
         values.put("ints0",stream.ints0);
         values.put("ints1",stream.ints1);
+        values.put("bindata",stream.bindata);
         values.put("fieldTypes",stream.fieldTypes);
     }
 

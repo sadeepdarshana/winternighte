@@ -1,5 +1,7 @@
 package com.example.sadeep.winternightd.dumping;
 
+import com.example.sadeep.winternightd.misc.Utils;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import java.util.Arrays;
  *    strings[1]  :  to store strings that are searchable       //user typed texts etc.
  *    ints[0]  :  to store integers that are not searchable     //indent of an indented Field, starts & ends of Spans, whether a CheckedField is ticked or not etc.
  *    ints[1]  :  to store integers that are searchable
+ *    bindata  :  to store binary data
  *    fieldTypes : to store the type (see Field.fieldType) of each of the Field stored (the length of this array is equal to the no of Fields stored)
  *
  *    When dumping data writeToFieldDataStream method of the respective Field puts(appends) data to the 5 streams
@@ -31,15 +34,17 @@ import java.util.Arrays;
  */
 public class FieldDataStream  {
 
-    ArrayList<String>[] strings = new ArrayList[2];//       the 5
+    ArrayList<String>[] strings = new ArrayList[2];//       the 6
     ArrayList<Integer>[] ints = new ArrayList[2]; //          data
     ArrayList<Integer> fieldTypes;//                            ArrayLists
+    ArrayList<Byte> bindata;
 
 
     //the index of the value that should be read next in the each of the above ArrayLists (this is like the cursor position)
     private int[] stringsPos = new int[2];
     private int[] intsPos = new int[2];
     private int fieldTypesPos = 0;
+    private int binDataPos;
 
     public FieldDataStream(){
         strings[0] = new ArrayList<>();         //initialize our data ArrayLists
@@ -48,6 +53,8 @@ public class FieldDataStream  {
         ints[0] = new ArrayList<>();
         ints[1] = new ArrayList<>();
 
+        bindata = new ArrayList<>();
+
         fieldTypes = new ArrayList<>();
     }
 
@@ -55,6 +62,7 @@ public class FieldDataStream  {
         for(int i=0;i<2;i++)strings[i]=elementsFromDelimitedString(rawStream.strings[i],false);
         ints[0] = integersFromByteArray(rawStream.ints0);
         ints[1] = elementsFromDelimitedString(rawStream.ints1,true);
+        bindata = Utils.arrayToArrayList(rawStream.bindata);
         fieldTypes = integersFromByteArray(rawStream.fieldTypes);
 
     }
@@ -71,6 +79,26 @@ public class FieldDataStream  {
 
         ints[arr].add(value);
     }
+
+
+    public byte getByte(){
+        return bindata.get(binDataPos++);
+    }
+    public void putByte(byte value){
+        bindata.add(value);
+    }
+
+    public void putByteArray(byte[] bytes){
+        for(byte b:bytes)putByte(b);
+    }
+
+    public byte[] getByteArray(int size){
+        byte[] bytes = new byte[size];
+        for(int i=0;i<size;i++)bytes[i]=getByte();
+        return bytes;
+    }
+
+
 
     public int getFieldType(){
         return fieldTypes.get(fieldTypesPos++);

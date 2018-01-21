@@ -3,6 +3,7 @@ package com.example.sadeep.winternightd.misc;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -11,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import com.example.sadeep.winternightd.spans.RichText;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -28,17 +30,10 @@ public class Utils {
         bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
         return stream.toByteArray();
     }
-
-    public static int[] byteArrayToIntArray(byte buf[]) {
-        int intArr[] = new int[buf.length / 4];
-        int offset = 0;
-        for(int i = 0; i < intArr.length; i++) {
-            intArr[i] = (buf[3 + offset] & 0xFF) | ((buf[2 + offset] & 0xFF) << 8) |
-                    ((buf[1 + offset] & 0xFF) << 16) | ((buf[0 + offset] & 0xFF) << 24);
-            offset += 4;
-        }
-        return intArr;
+    public static Bitmap byteArrayToBitmap(byte[] arr){
+        return BitmapFactory.decodeByteArray(arr,0,arr.length);
     }
+
 
     public static int getWidth(View view){
         if(view.getWidth()!=0)return view.getWidth();
@@ -96,4 +91,49 @@ public class Utils {
             }
         });
     }
+
+    public static ArrayList<Byte>  arrayToArrayList(byte[] bytes){
+        ArrayList<Byte> list= new ArrayList<>();
+        for(byte x:bytes)list.add(x);
+        return list;
+    }
+
+    public static int[] byte2int(byte[]src) {
+        int dstLength = src.length >>> 2;
+        int[]dst = new int[dstLength];
+
+        for (int i=0; i<dstLength; i++) {
+            int j = i << 2;
+            int x = 0;
+            x += (src[j++] & 0xff) << 0;
+            x += (src[j++] & 0xff) << 8;
+            x += (src[j++] & 0xff) << 16;
+            x += (src[j++] & 0xff) << 24;
+            dst[i] = x;
+        }
+        return dst;
+    }
+    public static byte[] int2byte(int[]src) {
+        int srcLength = src.length;
+        byte[]dst = new byte[srcLength << 2];
+
+        for (int i=0; i<srcLength; i++) {
+            int x = src[i];
+            int j = i << 2;
+            dst[j++] = (byte) ((x >>> 0) & 0xff);
+            dst[j++] = (byte) ((x >>> 8) & 0xff);
+            dst[j++] = (byte) ((x >>> 16) & 0xff);
+            dst[j++] = (byte) ((x >>> 24) & 0xff);
+        }
+        return dst;
+    }
+    public static byte[] toByteArray(ArrayList<Byte> in) {
+        final int n = in.size();
+        byte ret[] = new byte[n];
+        for (int i = 0; i < n; i++) {
+            ret[i] = in.get(i);
+        }
+        return ret;
+    }
+
 }

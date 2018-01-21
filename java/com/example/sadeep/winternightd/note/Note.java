@@ -26,6 +26,7 @@ import com.example.sadeep.winternightd.field.fields.BulletedField;
 import com.example.sadeep.winternightd.field.fields.CheckedField;
 import com.example.sadeep.winternightd.field.fields.ImageField;
 import com.example.sadeep.winternightd.field.fields.NumberedField;
+import com.example.sadeep.winternightd.misc.Utils;
 import com.example.sadeep.winternightd.notebook.Notebook;
 import com.example.sadeep.winternightd.notebook.NotebookViewHolderUtils;
 import com.example.sadeep.winternightd.selection.XSelection;
@@ -38,6 +39,10 @@ import com.example.sadeep.winternightd.field.SingleText;
 import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.spans.RichText;
 import com.example.sadeep.winternightd.selection.CursorPosition;
+
+import junit.framework.Assert;
+
+import java.util.Arrays;
 
 /**
  * Created by Sadeep on 10/18/2016.
@@ -237,7 +242,10 @@ public class Note extends LinearLayout {
                         ImageField imageField = (ImageField) FieldFactory.createNewField(Note.this.getContext(),ImageField.classFieldType,true);
                         imageField.setImageBitmap(photo);
                         Note.this.addView(imageField,cpos.fieldIndex+1);
-                        Note.this.addView(FieldFactory.createNewField(Note.this.getContext(),SimpleIndentedField.classFieldType,true));
+                        SimpleIndentedField textField = (SimpleIndentedField) FieldFactory.createNewField(Note.this.getContext(),SimpleIndentedField.classFieldType,true);
+                        Note.this.addView(textField);
+                        textField.getMainTextBox().requestFocus();
+
                     }
                     return true;
                 }

@@ -170,7 +170,7 @@ public class NotebookActivity extends NoteContainingActivity {
         newNote = newNoteBottomBar.getNote();
         activeNote = newNote;
 
-        //getWindow().setBackgroundDrawableResource(R.drawable.yyy);
+        getWindow().setBackgroundDrawableResource(R.drawable.default_wallpaper);
         //setActionBarMode(NoteContainingActivity.);
 
         final boolean[] notebookScrolledToBottom = {false};//'int[1]' because java syntax doesn't allow 'int' here
@@ -241,6 +241,9 @@ public class NotebookActivity extends NoteContainingActivity {
         }catch(IOException e){
             e.printStackTrace();
         }
+
+        getSupportActionBar().hide();
+
 
     }
     public void refreshBottomBar(){
