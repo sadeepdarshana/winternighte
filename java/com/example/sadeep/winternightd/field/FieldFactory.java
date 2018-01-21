@@ -6,6 +6,7 @@ import com.example.sadeep.winternightd.dumping.FieldDataStream;
 import com.example.sadeep.winternightd.field.fields.BulletedField;
 import com.example.sadeep.winternightd.field.fields.CheckedField;
 import com.example.sadeep.winternightd.field.fields.Field;
+import com.example.sadeep.winternightd.field.fields.H1Field;
 import com.example.sadeep.winternightd.field.fields.ImageField;
 import com.example.sadeep.winternightd.field.fields.NumberedField;
 import com.example.sadeep.winternightd.field.fields.SimpleIndentedField;
@@ -41,6 +42,9 @@ final public class FieldFactory {
                 break;
             case ImageField.classFieldType:
                 newField = new ImageField(isEditable,context);
+                break;
+            case H1Field.classFieldType:
+                newField = new H1Field(isEditable,context);
                 break;
         }
 

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 
 import com.example.sadeep.winternightd.buttons.RectangularButton;
+import com.example.sadeep.winternightd.misc.XColors;
 
 /**
  * Created by Sadeep on 6/18/2017.
@@ -34,7 +35,7 @@ public class AttachButton extends RectangularButton implements AttachBoxOpener {
 
     @Override
     protected int[] getContentColorForMode() {
-        return  new int[]{Color.parseColor("#00AC00"), Color.parseColor("#1EE44A")   };
+        return  new int[]{XColors.attachboxContent, Color.parseColor("#666666")   };
     }
 
     @Override

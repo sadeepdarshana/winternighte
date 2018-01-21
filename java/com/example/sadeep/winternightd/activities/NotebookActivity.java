@@ -21,9 +21,11 @@ import com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxOpener
 import com.example.sadeep.winternightd.clipboard.XClipboard;
 import com.example.sadeep.winternightd.dumping.RawFieldDataStream;
 import com.example.sadeep.winternightd.field.FieldFactory;
+import com.example.sadeep.winternightd.field.fields.H1Field;
 import com.example.sadeep.winternightd.field.fields.SimpleIndentedField;
 import com.example.sadeep.winternightd.localstorage.DataConnection;
 import com.example.sadeep.winternightd.misc.Utils;
+import com.example.sadeep.winternightd.misc.XColors;
 import com.example.sadeep.winternightd.note.Note;
 import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.notebook.Notebook;
@@ -131,29 +133,26 @@ public class NotebookActivity extends NoteContainingActivity {
             @Override
             protected void onSendLongClick(View v) {
                 Note note =getNote();
-                if(note.getFocusedChild()!=note.getFieldAt(0) ||
-                        note.getFieldAt(0).getFieldType()!=SimpleIndentedField.classFieldType)return;
 
-                SimpleIndentedField field = (SimpleIndentedField)note.getFieldAt(0);
-                CharSequence seq = field.getMainTextBox().getText();
+                if(     note.getFocusedChild()!=note.getFieldAt(0)                                          ||
+                        note.getFieldAt(0).getFieldType()!=SimpleIndentedField.classFieldType               ||
+                        ((SimpleIndentedField)note.getFieldAt(0)).getMainTextBox().getText().length()==0)
 
-                LiveFormattingStatus.format[0] = 1;
-                LiveFormattingStatus.format[2] = 1;
-                SpansController.updateSpansOnRegion((Spannable) seq,0,seq.length());
-                LiveFormattingStatus.format[0] = -1;
-                LiveFormattingStatus.format[2] = -1;
-                ToolbarController.refreshToolbars();
+                                return;
 
-                CharSequence seqnew = android.text.TextUtils.concat(seq,System.getProperty("line.separator"));
+                SimpleIndentedField oldField = (SimpleIndentedField)note.getFieldAt(0);
+                CharSequence seq = oldField.getMainTextBox().getText();
 
+                H1Field newField = (H1Field)FieldFactory.createNewField(getContext(),H1Field.classFieldType,true);
+                newField.getMainTextBox().setText(seq);
 
+                note.removeView(oldField);
+                note.addView(newField);
 
-                field.getMainTextBox().setText(seqnew);
-
-                SimpleIndentedField newField = (SimpleIndentedField)
+                SimpleIndentedField belowField = (SimpleIndentedField)
                         FieldFactory.createNewField(getContext(),SimpleIndentedField.classFieldType,true);
-                note.addView(newField,1);
-                newField.getMainTextBox().requestFocus();
+                note.addView(belowField,1);
+                belowField.getMainTextBox().requestFocus();
 
 
             }
@@ -288,7 +287,7 @@ public class NotebookActivity extends NoteContainingActivity {
 
     @Override
     protected Drawable getActionBarDrawable() {
-        return new ColorDrawable(0xff449944);
+        return new ColorDrawable(XColors.actionbarColor);
     }
     @Override
     protected String getActionBarTitle() {

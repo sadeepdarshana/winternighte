@@ -24,6 +24,7 @@ import com.example.sadeep.winternightd.dumping.FieldDataStream;
 import com.example.sadeep.winternightd.field.FieldFactory;
 import com.example.sadeep.winternightd.field.fields.BulletedField;
 import com.example.sadeep.winternightd.field.fields.CheckedField;
+import com.example.sadeep.winternightd.field.fields.H1Field;
 import com.example.sadeep.winternightd.field.fields.ImageField;
 import com.example.sadeep.winternightd.field.fields.NumberedField;
 import com.example.sadeep.winternightd.misc.Utils;
@@ -250,6 +251,27 @@ public class Note extends LinearLayout {
                     return true;
                 }
             };
+        }
+        if(attachButtonId == AttachBoxManager.ATTACH_BUTTON_ID_H1){
+            H1Field field = (H1Field) FieldFactory.createNewField(getContext(),H1Field.classFieldType,true);
+            CursorPosition cpos = getCurrentCursorPosition();
+            int newFieldPos;
+            if(cpos==null)newFieldPos = getFieldCount();
+            else {
+                newFieldPos = cpos.fieldIndex+1;
+                if(cpos.characterIndex==0)newFieldPos=cpos.fieldIndex;
+            }
+
+            if(getFieldAt(newFieldPos-1)instanceof SimpleIndentedField){
+                if(((SimpleIndentedField)getFieldAt(newFieldPos-1)).isEmpty()){
+                    removeView(getFieldAt(newFieldPos-1));
+                    newFieldPos--;
+                }
+            }
+
+            addView(field,newFieldPos);
+            field.getMainTextBox().requestFocus();
+
         }
     }
 

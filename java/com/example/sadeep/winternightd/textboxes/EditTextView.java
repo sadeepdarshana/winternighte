@@ -80,7 +80,14 @@ public class EditTextView {
         TextView oldView = this.isEditable ? xEditText : xTextView;
         TextView newView = this.isEditable ? new XTextView(boundField,context) : new XEditText(boundField,context);
 
-        RichText richTextPrev = RichText.generateRichText((Spanned) oldView.getText()); //dump the content of text(+spans) to a RichText
+        newView.setTextColor(oldView.getTextColors());
+        newView.setGravity(oldView.getGravity());
+        newView.setTypeface(oldView.getTypeface());
+
+        RichText richTextPrev;
+        try {
+            richTextPrev = RichText.generateRichText((Spanned) oldView.getText()); //dump the content of text(+spans) to a RichText
+        }catch(Exception e){richTextPrev = RichText.generateRichText(new SpannableStringBuilder(""));}
         SpannableStringBuilder spannableStringBuilder = richTextPrev.getCharSequence(); //generate string back
 
         newView.setText(spannableStringBuilder);

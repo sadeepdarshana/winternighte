@@ -10,6 +10,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.example.sadeep.winternightd.misc.XColors;
+
 /**
  * Created by Sadeep on 6/19/2017.
  */
@@ -22,7 +24,7 @@ public class CancelCircularButton extends FloatingActionButton {
     public CancelCircularButton(Context context, AttributeSet attrs) {
         super(context, attrs);
         setColor(colorNormal);
-        getDrawable().setColorFilter(new PorterDuffColorFilter(Color.parseColor("#50B450"), PorterDuff.Mode.MULTIPLY));
+        getDrawable().setColorFilter(new PorterDuffColorFilter(XColors.attachboxContent, PorterDuff.Mode.MULTIPLY));
         setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

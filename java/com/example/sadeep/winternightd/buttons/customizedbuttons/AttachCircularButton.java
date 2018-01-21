@@ -23,7 +23,7 @@ public class AttachCircularButton extends FloatingActionButton implements Attach
 
     public AttachCircularButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        getDrawable().setColorFilter(new PorterDuffColorFilter(Color.parseColor("#50B450"), PorterDuff.Mode.MULTIPLY));
+        //getDrawable().setColorFilter(new PorterDuffColorFilter(Color.parseColor("#50B450"), PorterDuff.Mode.MULTIPLY));
         setColor(colorNormal);
         setOnTouchListener(new OnTouchListener() {
             @Override

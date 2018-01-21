@@ -14,7 +14,7 @@ import android.view.View;
 
 public class SaveNoteCircularButton extends FloatingActionButton {
 
-    private int colorNormal  = Color.parseColor("#50B450");
+    private int colorNormal  = Color.parseColor("#00897b");
     private int colorPressed = Color.parseColor("#00EE00");
 
     public SaveNoteCircularButton(Context context, AttributeSet attrs) {
