@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * Created by Sadeep on 11/28/2016.
@@ -37,7 +38,7 @@ public class FieldDataStream  {
     ArrayList<String>[] strings = new ArrayList[2];//       the 6
     ArrayList<Integer>[] ints = new ArrayList[2]; //          data
     ArrayList<Integer> fieldTypes;//                            ArrayLists
-    ArrayList<Byte> bindata;
+    byte[] bindata;
 
 
     //the index of the value that should be read next in the each of the above ArrayLists (this is like the cursor position)
@@ -46,14 +47,14 @@ public class FieldDataStream  {
     private int fieldTypesPos = 0;
     private int binDataPos;
 
-    public FieldDataStream(){
+    public FieldDataStream(int byteArraySize){
         strings[0] = new ArrayList<>();         //initialize our data ArrayLists
         strings[1] = new ArrayList<>();
 
         ints[0] = new ArrayList<>();
         ints[1] = new ArrayList<>();
 
-        bindata = new ArrayList<>();
+        bindata = new byte [byteArraySize];
 
         fieldTypes = new ArrayList<>();
     }
@@ -62,7 +63,7 @@ public class FieldDataStream  {
         for(int i=0;i<2;i++)strings[i]=elementsFromDelimitedString(rawStream.strings[i],false);
         ints[0] = integersFromByteArray(rawStream.ints0);
         ints[1] = elementsFromDelimitedString(rawStream.ints1,true);
-        bindata = Utils.arrayToArrayList(rawStream.bindata);
+        bindata = rawStream.bindata;
         fieldTypes = integersFromByteArray(rawStream.fieldTypes);
 
     }
@@ -82,14 +83,15 @@ public class FieldDataStream  {
 
 
     public byte getByte(){
-        return bindata.get(binDataPos++);
+        return bindata[binDataPos++];
     }
     public void putByte(byte value){
-        bindata.add(value);
+        bindata[binDataPos++]=value;
     }
 
     public void putByteArray(byte[] bytes){
-        for(byte b:bytes)putByte(b);
+        java.lang.System.arraycopy(bytes,0,bindata,binDataPos,bytes.length);
+        binDataPos+=bytes.length;
     }
 
     public byte[] getByteArray(int size){

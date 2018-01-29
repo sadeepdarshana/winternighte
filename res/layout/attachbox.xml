@@ -74,6 +74,16 @@
             android:paddingBottom="7dp"
             android:visibility="visible"
             android:src="@drawable/attachbox_camera" />
+        <com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:tag="5#ffffff"
+            grid:layout_columnWeight="1"
+            android:paddingTop="7dp"
+            android:paddingBottom="7dp"
+            android:visibility="visible"
+            android:src="@drawable/attachbox_gallery" />
 
         <com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxButton
             android:layout_width="wrap_content"

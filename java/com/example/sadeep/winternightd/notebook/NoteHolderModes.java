@@ -23,6 +23,7 @@ import com.example.sadeep.winternightd.attachbox.AttachBoxManager;
 import com.example.sadeep.winternightd.attachbox.OnAttachBoxItemClick;
 import com.example.sadeep.winternightd.bottombar.ExtendedToolbar;
 import com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxOpener;
+import com.example.sadeep.winternightd.field.fields.H1Field;
 import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.misc.NotebookItemChamber;
 import com.example.sadeep.winternightd.notebook.NotebookViewHolderUtils.NoteHolder;
@@ -111,6 +112,8 @@ public class NoteHolderModes {
 
         public static void onBind(NoteHolder noteHolder) {
             ViewLower viewLower = (ViewLower) noteHolder.getLowerChamber().getChamberContent();
+            if(noteHolder.getNote().getFieldAt(0)instanceof H1Field)noteHolder.getNoteSpace().setGravity(Gravity.TOP);
+                else noteHolder.getNoteSpace().setGravity(Gravity.CENTER_VERTICAL);
             viewLower.setDateTime(noteHolder.getNote().noteInfo.currentVersionTime);
             viewLower.dateTimeTextView.setTextColor(
                     noteHolder.getNote().noteState==STATE_EDITED ? DATETIME_COLOR_SPECIAL:DATETIME_COLOR_DEFAULT);

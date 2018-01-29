@@ -2,14 +2,14 @@ package com.example.sadeep.winternightd.field.fields;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.util.TypedValue;
+import android.graphics.BitmapFactory;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.example.sadeep.winternightd.dumping.FieldDataStream;
+import com.example.sadeep.winternightd.field.fielddata.BinaryData;
+import com.example.sadeep.winternightd.field.fielddata.BitmapData;
 import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.misc.Utils;
 
@@ -25,6 +25,7 @@ public class ImageField extends IndentedField {
 
     private ImageView image;
     private Bitmap bmp;
+    private BitmapData bitmapData;
 
     public ImageField(Context context) {
         this(false,context);
@@ -48,15 +49,18 @@ public class ImageField extends IndentedField {
 
     }
 
-    public void setImageBitmap(Bitmap bmp){
-        this.bmp = bmp;
+    public void setImageBitmap(final BitmapData bitmapData){
+        this.bmp = bitmapData.getSampleBmp();
+        this.bitmapData = bitmapData;
 
         image.setImageBitmap(bmp);
         setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        image.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        image.setScaleType(ImageView.ScaleType.MATRIX);
         image.setAdjustViewBounds(true);
         image.setPadding(Globals.dp2px*10,0,Globals.dp2px*10,0);
+
+
     }
 
 
@@ -66,23 +70,19 @@ public class ImageField extends IndentedField {
     @Override
     public void writeToFieldDataStream(FieldDataStream stream) {
         super.writeToFieldDataStream(stream);
-
-        byte[] arr = Utils.bitmapToByteArray(bmp);
-
-        stream.putInt(false,arr.length);        // 0 size of int array
-
-        stream.putByteArray(arr);   //1 bytearray
+        stream.putString(false,bitmapData.getId());     //0
     }
     @Override
     public void readFromFieldDataStream(FieldDataStream stream) {
         super.readFromFieldDataStream(stream);
 
-        int size = stream.getInt(false);    // 0 size of int array
-
-        byte[] arr = stream.getByteArray(size); //1 bytearray
-
-        setImageBitmap(Utils.byteArrayToBitmap(arr));
-
+        String bitmapDataId = stream.getString(false);
+        bitmapData = new BitmapData(bitmapDataId);
+        setImageBitmap(bitmapData);
     }
 
+    @Override
+    public int getWritableByteArraySize() {
+        return 0;
+    }
 }

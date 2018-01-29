@@ -92,4 +92,9 @@ public abstract class IndentedField extends Field {
         super.readFromFieldDataStream(stream);
         setIndent(stream.getInt(false));                              //0 indent
     }
+
+    @Override
+    public int getWritableByteArraySize() {
+        return super.getWritableByteArraySize();
+    }
 }

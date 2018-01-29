@@ -1,5 +1,7 @@
 package com.example.sadeep.winternightd.note;
 
+import com.example.sadeep.winternightd.misc.Utils;
+
 /**
  * Created by Sadeep on 7/9/2017.
  */
@@ -21,7 +23,7 @@ public class NoteInfo {
     public static NoteInfo newNoteInfoForCurrentTime(){
         NoteInfo info = new NoteInfo();
 
-        info.noteUUID = java.util.UUID.randomUUID().toString().replaceAll("-","");
+        info.noteUUID = Utils.getNewUUID();
         info.currentVersionUUID = java.util.UUID.randomUUID().toString().replaceAll("-","");
 
         info.createdTime = System.currentTimeMillis();

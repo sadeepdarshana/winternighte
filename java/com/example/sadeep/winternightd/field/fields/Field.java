@@ -290,7 +290,7 @@ public abstract class Field extends LinearLayout {
      */
     public Field duplicate(){
         //we dump the content of this to a FieldDataStream and creates a new Field out of the dumped data
-        FieldDataStream fd = new FieldDataStream();
+        FieldDataStream fd = new FieldDataStream(getWritableByteArraySize());
         this.writeToFieldDataStream(fd);
 
         return FieldFactory.fromFieldDataStream(getContext(), fd, getIsEditable());
@@ -315,6 +315,10 @@ public abstract class Field extends LinearLayout {
 
     public void readFromFieldDataStream(FieldDataStream stream){
 
+    }
+
+    public int getWritableByteArraySize(){
+        return 0;
     }
 
 }

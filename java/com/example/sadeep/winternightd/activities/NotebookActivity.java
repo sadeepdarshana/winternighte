@@ -21,6 +21,7 @@ import com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxOpener
 import com.example.sadeep.winternightd.clipboard.XClipboard;
 import com.example.sadeep.winternightd.dumping.RawFieldDataStream;
 import com.example.sadeep.winternightd.field.FieldFactory;
+import com.example.sadeep.winternightd.field.fields.Field;
 import com.example.sadeep.winternightd.field.fields.H1Field;
 import com.example.sadeep.winternightd.field.fields.SimpleIndentedField;
 import com.example.sadeep.winternightd.localstorage.DataConnection;
@@ -76,13 +77,20 @@ public class NotebookActivity extends NoteContainingActivity {
 
 
         String destPath = getFilesDir().getPath();
+
         String dbpath =  destPath.substring(0, destPath.lastIndexOf("/")) + "/databases";;
+        //String dbpath =  "/storage/emulated/0/download";
+
+        String respath =  destPath.substring(0, destPath.lastIndexOf("/")) + "/fielddata";
+        Globals.respath = respath;
+        File createDir = new File(respath+ File.separator);
+        if(!createDir.exists()) createDir.mkdir();
+
 
         try{
             if(!new File(dbpath+"/winternightd.db").exists()) copyDataBase(dbpath);
-        }catch (Exception e) {
-
         }
+        catch (Exception e) {}
 
         /*
         Bundle b = getIntent().getExtras();
@@ -104,6 +112,7 @@ public class NotebookActivity extends NoteContainingActivity {
 
         Globals.initialize(this);
         DataConnection.initialize(this);
+        Utils.initialize(this);
         XClipboard.initialize(this);
 
 
@@ -310,7 +319,7 @@ public class NotebookActivity extends NoteContainingActivity {
         if(newNote.isEmpty())return;
         XSelection.clearSelections();
         NoteContainingActivityRootView.pauseLayout();
-        RawFieldDataStream streams=new RawFieldDataStream(newNote.getFieldDataStream());
+        //RawFieldDataStream streams=new RawFieldDataStream(newNote.getFieldDataStream());
         //for(int i=0;i<100000;i++) {
             notebook.getNotebookDataHandler().addNewNote(newNote);
             //if(i%100==0)d.p(i);

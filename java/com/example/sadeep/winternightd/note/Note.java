@@ -1,49 +1,75 @@
 package com.example.sadeep.winternightd.note;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.net.Uri;
+import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.text.Spannable;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.text.Spanned;
-import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.sadeep.winternightd.BuildConfig;
 import com.example.sadeep.winternightd.R;
 import com.example.sadeep.winternightd.activities.NoteContainingActivity;
+import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.attachbox.AttachBoxManager;
 import com.example.sadeep.winternightd.dumping.FieldDataStream;
 import com.example.sadeep.winternightd.field.FieldFactory;
+import com.example.sadeep.winternightd.field.SingleText;
+import com.example.sadeep.winternightd.field.fielddata.BitmapData;
 import com.example.sadeep.winternightd.field.fields.BulletedField;
 import com.example.sadeep.winternightd.field.fields.CheckedField;
+import com.example.sadeep.winternightd.field.fields.Field;
 import com.example.sadeep.winternightd.field.fields.H1Field;
 import com.example.sadeep.winternightd.field.fields.ImageField;
 import com.example.sadeep.winternightd.field.fields.NumberedField;
+import com.example.sadeep.winternightd.field.fields.SimpleIndentedField;
+import com.example.sadeep.winternightd.misc.AlarmReceiver;
 import com.example.sadeep.winternightd.misc.Utils;
 import com.example.sadeep.winternightd.notebook.Notebook;
 import com.example.sadeep.winternightd.notebook.NotebookViewHolderUtils;
-import com.example.sadeep.winternightd.selection.XSelection;
-import com.example.sadeep.winternightd.temp.d;
-import com.example.sadeep.winternightd.textboxes.XEditText;
-import com.example.sadeep.winternightd.spans.SpansFactory;
-import com.example.sadeep.winternightd.field.fields.Field;
-import com.example.sadeep.winternightd.field.fields.SimpleIndentedField;
-import com.example.sadeep.winternightd.field.SingleText;
-import com.example.sadeep.winternightd.misc.Globals;
-import com.example.sadeep.winternightd.spans.RichText;
 import com.example.sadeep.winternightd.selection.CursorPosition;
+import com.example.sadeep.winternightd.selection.XSelection;
+import com.example.sadeep.winternightd.spans.RichText;
+import com.example.sadeep.winternightd.textboxes.XEditText;import android.Manifest;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
+import android.widget.Toast;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
-import junit.framework.Assert;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
-import java.util.Arrays;
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by Sadeep on 10/18/2016.
@@ -124,6 +150,8 @@ public class Note extends LinearLayout {
      */
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params){
+
+        if(XSelection.isSelectionAvailable())XSelection.clearSelections();
 
         Field f = null;
         try{
@@ -207,8 +235,10 @@ public class Note extends LinearLayout {
             field.getMainTextBox().requestFocus();
         }
         if(attachButtonId == AttachBoxManager.ATTACH_BUTTON_ID_NUMBEREDFIELD){
+
+
             NumberedField field = (NumberedField) FieldFactory.createNewField(getContext(),NumberedField.classFieldType,true);
-            CursorPosition cpos = getCurrentCursorPosition();
+            CursorPosition cpos = this.getCurrentCursorPosition();
             int newFieldPos;
             if(cpos==null)newFieldPos = getFieldCount();
             else newFieldPos = cpos.fieldIndex+1;
@@ -225,9 +255,48 @@ public class Note extends LinearLayout {
         }
 
 
+
         if(attachButtonId == AttachBoxManager.ATTACH_BUTTON_ID_CAMERA){
-            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            ((Activity)getContext()).startActivityForResult(cameraIntent, 1888);
+
+            new Thread(){
+                @Override
+                public void run() {
+                    dispatchTakePictureIntent();
+                }
+            }.start();
+
+
+
+
+                ((NoteContainingActivity)getContext()).onActivityResultListener= new PreferenceManager.OnActivityResultListener() {
+                    @Override
+                    public boolean onActivityResult(final int requestCode, final int resultCode, Intent data) {
+                        ((NoteContainingActivity) Note.this.getContext()).onActivityResultListener = null;
+                        //d.wow((NoteContainingActivity)Note.this.getContext());
+                        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+                            byte[] bytes = null;
+                            try {
+                                FileInputStream fis = new FileInputStream(mCurrentPhotoPath);
+                                bytes = new byte[fis.available()];
+                                fis.read(bytes, 0, fis.available());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            final byte[] finalBytes = bytes;
+                            addNewImageField(new BitmapData(finalBytes));
+
+                        }
+                        return true;
+                    }
+                };
+            }
+
+        if(attachButtonId == AttachBoxManager.ATTACH_BUTTON_ID_GALLERY){
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+
+            ((Activity)getContext()).startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1);
 
             ((NoteContainingActivity)getContext()).onActivityResultListener= new PreferenceManager.OnActivityResultListener() {
                 @Override
@@ -236,16 +305,19 @@ public class Note extends LinearLayout {
                     //d.wow((NoteContainingActivity)Note.this.getContext());
 
 
-                    if (requestCode == 1888 && resultCode == Activity.RESULT_OK) {
-                        Bitmap photo = (Bitmap) data.getExtras().get("data");
-                        CursorPosition cpos = getCurrentCursorPosition();
-                        if(cpos==null)cpos= new CursorPosition(0,0);
-                        ImageField imageField = (ImageField) FieldFactory.createNewField(Note.this.getContext(),ImageField.classFieldType,true);
-                        imageField.setImageBitmap(photo);
-                        Note.this.addView(imageField,cpos.fieldIndex+1);
-                        SimpleIndentedField textField = (SimpleIndentedField) FieldFactory.createNewField(Note.this.getContext(),SimpleIndentedField.classFieldType,true);
-                        Note.this.addView(textField);
-                        textField.getMainTextBox().requestFocus();
+                    if (requestCode == 1 && resultCode == RESULT_OK) {
+
+
+
+                        try {
+                            Uri uri = data.getData();
+
+                            Bitmap photo = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), uri);
+                            addNewImageField(photo);
+                        } catch (IOException e) { }
+
+
+
 
                     }
                     return true;
@@ -437,7 +509,7 @@ public class Note extends LinearLayout {
 //dumping related methods
 
     public FieldDataStream getFieldDataStream(){
-        FieldDataStream stream = new FieldDataStream();
+        FieldDataStream stream = new FieldDataStream(getWritableByteArraySize());
         writeToFieldDataStream(stream);
         return stream;
     }
@@ -447,6 +519,12 @@ public class Note extends LinearLayout {
             Field field = getFieldAt(c);
             field.writeToFieldDataStream(stream);
         }
+    }
+
+    public int getWritableByteArraySize() {
+        int sum=0;
+        for(int c=0;c<getFieldCount();c++)sum+=getFieldAt(c).getWritableByteArraySize();
+        return sum;
     }
 
     public void readFromFieldDataStream(FieldDataStream stream){
@@ -459,4 +537,62 @@ public class Note extends LinearLayout {
         readFromFieldDataStream(stream);
     }
 
+
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_TAKE_PHOTO = 1;
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {}
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(getContext(),"com.whatsnoted.beta.fileprovider",photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                ((Activity)getContext()).startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+    private void addNewImageField(Bitmap photo){
+
+        CursorPosition cpos = getCurrentCursorPosition();
+        if(cpos==null)cpos= new CursorPosition(0,0);
+        ImageField imageField = (ImageField) FieldFactory.createNewField(Note.this.getContext(),ImageField.classFieldType,true);
+        imageField.setImageBitmap(new BitmapData(photo));
+        Note.this.addView(imageField,cpos.fieldIndex+1);
+        SimpleIndentedField textField = (SimpleIndentedField) FieldFactory.createNewField(Note.this.getContext(),SimpleIndentedField.classFieldType,true);
+        Note.this.addView(textField);
+        textField.getMainTextBox().requestFocus();
+    }
+    private void addNewImageField(BitmapData photo){
+
+        CursorPosition cpos = getCurrentCursorPosition();
+        if(cpos==null)cpos= new CursorPosition(0,0);
+        ImageField imageField = (ImageField) FieldFactory.createNewField(Note.this.getContext(),ImageField.classFieldType,true);
+        imageField.setImageBitmap(photo);
+        Note.this.addView(imageField,cpos.fieldIndex+1);
+        SimpleIndentedField textField = (SimpleIndentedField) FieldFactory.createNewField(Note.this.getContext(),SimpleIndentedField.classFieldType,true);
+        Note.this.addView(textField);
+        textField.getMainTextBox().requestFocus();
+    }
+    String mCurrentPhotoPath;
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getContext().getCacheDir();
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
 }

@@ -2,8 +2,11 @@ package com.example.sadeep.winternightd.misc;
 
 import android.app.Activity;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -12,7 +15,13 @@ import android.view.inputmethod.InputMethodManager;
 import com.example.sadeep.winternightd.spans.RichText;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -21,6 +30,13 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
  */
 
 public class Utils {
+
+    static Activity activity;
+
+    public static void initialize(Activity context){
+        activity=context;
+    }
+
     public static CharSequence duplicateCharSequence(CharSequence seq){
         return RichText.generateRichText((Spanned) seq).getCharSequence();
     }
@@ -97,6 +113,11 @@ public class Utils {
         for(byte x:bytes)list.add(x);
         return list;
     }
+    public static LinkedList<Byte> arrayToLinkedList(byte[] bytes){
+        LinkedList<Byte> list= new LinkedList<>();
+        for(byte x:bytes)list.add(x);
+        return list;
+    }
 
     public static int[] byte2int(byte[]src) {
         int dstLength = src.length >>> 2;
@@ -135,5 +156,45 @@ public class Utils {
         }
         return ret;
     }
+    public static byte[] toByteArray(LinkedList<Byte> in) {
+        final int n = in.size();
+        byte ret[] = new byte[n];
+        for (int i = 0; i < n; i++) {
+            ret[i] = in.get(i);
+        }
+        return ret;
+    }
+    public static void copyFile(File sourceFile, File destFile) throws IOException {
+        if (!sourceFile.exists()) {
+            return;
+        }
 
+        FileChannel source = null;
+        FileChannel destination = null;
+        source = new FileInputStream(sourceFile).getChannel();
+        destination = new FileOutputStream(destFile).getChannel();
+        if (destination != null && source != null) {
+            destination.transferFrom(source, 0, source.size());
+        }
+        if (source != null) {
+            source.close();
+        }
+        if (destination != null) {
+            destination.close();
+        }
+
+
+    }
+    public static String getRealPathFromURI(Uri contentUri) {
+
+        String[] proj = { MediaStore.Video.Media.DATA };
+        Cursor cursor = activity.managedQuery(contentUri, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
+    public static String getNewUUID(){
+        return java.util.UUID.randomUUID().toString().replaceAll("-","");
+    }
 }

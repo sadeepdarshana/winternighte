@@ -12,6 +12,7 @@ import android.widget.EditText;
 final public  class Globals {
 
     public static float defaultFontSize;
+    public static String respath;
 
     private Globals(){}
 

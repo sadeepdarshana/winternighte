@@ -36,6 +36,7 @@ final public class AttachBoxManager {
     public static final int ATTACH_BUTTON_ID_NUMBEREDFIELD = 2;
     public static final int ATTACH_BUTTON_ID_CAMERA = 3;
     public static final int ATTACH_BUTTON_ID_H1 = 4;
+    public static final int ATTACH_BUTTON_ID_GALLERY = 5;
 
     public static PopupWindow popupWindow;
 

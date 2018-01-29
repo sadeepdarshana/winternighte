@@ -51,7 +51,7 @@ public class RawFieldDataStream {
         ints0 = byteArrayFromIntegers(stream.ints[0]);
         ints1 = delimitedStringFromElements(stream.ints[1]);
 
-        bindata = Utils.toByteArray(stream.bindata);
+        bindata = stream.bindata;
 
         fieldTypes = byteArrayFromIntegers(stream.fieldTypes);
     }

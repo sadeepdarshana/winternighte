@@ -9,6 +9,7 @@ import com.example.sadeep.winternightd.dumping.RawFieldDataStream;
 import com.example.sadeep.winternightd.note.Note;
 import com.example.sadeep.winternightd.note.NoteFactory;
 import com.example.sadeep.winternightd.note.NoteInfo;
+import com.example.sadeep.winternightd.selection.XSelection;
 
 /**
  * Created by Sadeep on 6/16/2017.
@@ -34,6 +35,8 @@ public class NotebookDataHandler {
         DataConnection.writableDatabase().insertWithOnConflict(notebookUUID,null,values, SQLiteDatabase.CONFLICT_IGNORE);
     }
     public void addExistingNote(Note note){
+        if(XSelection.isSelectionAvailable())XSelection.clearSelections();
+
         RawFieldDataStream stream = new RawFieldDataStream(note.getFieldDataStream());
         NoteInfo info = note.noteInfo;
         info.currentVersionTime = System.currentTimeMillis();

@@ -36,6 +36,9 @@ public class NotebookItem  extends SexyCard {
         noteSpace = (LinearLayout) notebookItemInnerLayout.findViewById(R.id.notespace);
 
 
+
+
+
         notebookItemInnerLayout.setClickable(true);
         int[] attrs = new int[]{R.attr.selectableItemBackground};
         TypedArray typedArray = context.obtainStyledAttributes(attrs);

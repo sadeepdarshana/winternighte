@@ -239,6 +239,9 @@ public class SimpleIndentedField extends IndentedField implements SingleText {
         return characterPos;
     }
 
+    public boolean isEmpty() {
+        return getMainTextBox().length()==0;
+    }
 
 
 //dumping related methods
@@ -256,8 +259,9 @@ public class SimpleIndentedField extends IndentedField implements SingleText {
 
         editTextView.get().setText(RichText.readFromFieldDataStream(stream).getCharSequence());            //0  the text of the Field
     }
-
-    public boolean isEmpty() {
-        return getMainTextBox().length()==0;
+    @Override
+    public int getWritableByteArraySize() {
+        return super.getWritableByteArraySize();
     }
+
 }
