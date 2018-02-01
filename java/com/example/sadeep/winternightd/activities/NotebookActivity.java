@@ -250,7 +250,6 @@ public class NotebookActivity extends NoteContainingActivity {
             e.printStackTrace();
         }
 
-        getSupportActionBar().hide();
 
 
     }
