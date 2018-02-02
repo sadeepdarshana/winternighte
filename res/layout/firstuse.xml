@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="21dp"
+
+        android:inputType="textMultiLine"
+        android:text="Thanks for downloading.  \n\nThis is still the beta version, only few features are available, yet it should be cool to explore. \n\nWe'll be adding more features soon to maximize your productivity.  \n\nStay with us.  \n\nTeam WhatsNote \nස්තූතියි....!!!"
+        android:textColor="#111111" />
+
+    <Button
+        android:id="@+id/firstuseok"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="?android:attr/textColorLink"
+        android:text="Ok"
+        android:textColor="@color/cardview_light_background" />
+</LinearLayout>

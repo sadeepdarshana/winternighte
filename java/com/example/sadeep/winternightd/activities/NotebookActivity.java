@@ -5,10 +5,12 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Spannable;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -229,6 +231,25 @@ public class NotebookActivity extends NoteContainingActivity {
         }.start();
     }
     private void copyDataBase(String dbPath){
+
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View promptView = layoutInflater.inflate(R.layout.firstuse, null);
+
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setView(promptView);
+
+        final AlertDialog ad = alertDialogBuilder.create();
+
+        promptView.findViewById(R.id.firstuseok).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ad.cancel();
+            }
+        });
+        ad.show();
+
+
+
         try{
             InputStream assestDB = getAssets().open("databases/winternightd.db");
 
