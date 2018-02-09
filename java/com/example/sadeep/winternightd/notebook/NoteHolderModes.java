@@ -1,7 +1,9 @@
 package com.example.sadeep.winternightd.notebook;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -418,8 +420,27 @@ public class NoteHolderModes {
                 @Override
                 public void run() {
                     noteHolder.getNotebook().notebookActivity.enableBottomBarToGlassModeIfNecessary();
+
                 }
             },200);
+            noteHolder.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(noteHolder.getNotebook().getChildAdapterPosition(noteHolder)==1)noteHolder.getNotebook().smoothScrollToPosition(0);
+                }
+            },250);
+
+            //
+            noteHolder.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    if(noteHolder.getNotebook().getChildAdapterPosition(noteHolder)==1);//noteHolder.getNotebook().smoothScrollToPosition(0);
+
+                    else if(noteHolder.getBottom()>noteHolder.getNotebook().notebookActivity.rootView.getBottom())
+                        noteHolder.getNotebook().layoutManager.scrollToPositionWithOffset(noteHolder.getNotebook().getChildAdapterPosition(noteHolder),0);
+                }
+            },450);
         }
 
         public static void onBind(NoteHolder noteHolder) {
@@ -481,7 +502,7 @@ public class NoteHolderModes {
             }
         }
         public static class SettingsLower extends LinearLayout{
-            public SettingsLower(Context context, final NoteHolder noteHolder) {
+            public SettingsLower(final Context context, final NoteHolder noteHolder) {
                 super(context);
 
                 LinearLayout.LayoutParams params = new NotebookItemChamber.LayoutParams(MATCH_PARENT,WRAP_CONTENT);
@@ -502,24 +523,45 @@ public class NoteHolderModes {
                 findViewById(R.id.delete).setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        noteHolder.getNotebook().getNotebookDataHandler().deleteNote(noteHolder.getNote().noteInfo.noteUUID);
-                        XAnimation.changeDimension(noteHolder, 300, XAnimation.DIMENSION_HEIGHT, noteHolder.getHeight(), 0, new XAnimationListener() {
-                            @Override
-                            public void onEnd() {
-                                noteHolder.setVisibility(GONE);
-                                noteHolder.getNote().noteState = STATE_DELETED;
 
-                                Notebook.LayoutParams params = (RecyclerView.LayoutParams)noteHolder.getLayoutParams();
-                                int margin = 0;
-                                params.setMargins(margin,margin,margin,margin);
-                                noteHolder.requestLayout();
-                            }
 
+                        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                             @Override
-                            public void onStep() {
-                                
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which){
+                                    case DialogInterface.BUTTON_POSITIVE:
+                                        noteHolder.getNotebook().getNotebookDataHandler().deleteNote(noteHolder.getNote().noteInfo.noteUUID);
+                                        XAnimation.changeDimension(noteHolder, 300, XAnimation.DIMENSION_HEIGHT, noteHolder.getHeight(), 0, new XAnimationListener() {
+                                            @Override
+                                            public void onEnd() {
+                                                noteHolder.setVisibility(GONE);
+                                                noteHolder.getNote().noteState = STATE_DELETED;
+
+                                                Notebook.LayoutParams params = (RecyclerView.LayoutParams)noteHolder.getLayoutParams();
+                                                int margin = 0;
+                                                params.setMargins(margin,margin,margin,margin);
+                                                noteHolder.requestLayout();
+                                            }
+
+                                            @Override
+                                            public void onStep() {
+
+                                            }
+                                        });
+                                        break;
+
+                                    case DialogInterface.BUTTON_NEGATIVE:
+                                        //No button clicked
+                                        break;
+                                }
                             }
-                        });
+                        };
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener)
+                                .setNegativeButton("No", dialogClickListener).show();
+
+
                     }
                 });
             }

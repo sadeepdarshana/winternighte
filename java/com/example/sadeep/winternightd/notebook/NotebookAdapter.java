@@ -90,7 +90,7 @@ class NotebookAdapter extends RecyclerView.Adapter <NotebookViewHolderUtils.Note
                 }
                 else{//instantiate and put it into cache in case we don't have to instantiate again in the future
                     note = NoteFactory.fromFieldDataStream(context, cursor.getFieldDataStream(positionInCursor), false, notebook, info);
-                    cache.putIfAbsent(info.noteUUID,note);
+                    cache.put(info.noteUUID,note);
                 }
                 noteHolder.bind(note, MODE_VIEW);
                 noteHolder.setMode(MODE_VIEW, false);
