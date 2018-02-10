@@ -27,6 +27,7 @@ import com.example.sadeep.winternightd.misc.Globals;
  * Created by Sadeep on 7/1/2017.
  */
 final public class AttachBoxManager {
+
     private AttachBoxManager() {}
 
     public static boolean displayed = false;
@@ -37,6 +38,7 @@ final public class AttachBoxManager {
     public static final int ATTACH_BUTTON_ID_CAMERA = 3;
     public static final int ATTACH_BUTTON_ID_H1 = 4;
     public static final int ATTACH_BUTTON_ID_GALLERY = 5;
+    public static final int ATTACH_BUTTON_ID_TABLE = 6;
 
     public static PopupWindow popupWindow;
 

@@ -80,6 +80,12 @@ public class FieldDataStream  {
 
         ints[arr].add(value);
     }
+    public void putInt(int value){
+        putInt(false,value);
+    }
+    public int getInt(){
+        return getInt(false);
+    }
 
 
     public byte getByte(){
@@ -115,6 +121,9 @@ public class FieldDataStream  {
 
         return strings[arr].get(stringsPos[arr]++);
     }
+    public String getString(){
+        return getString(true);
+    }
     public void putString(boolean searchable,String value){
         int arr = 0;
         if(searchable)arr = 1;
@@ -122,6 +131,9 @@ public class FieldDataStream  {
         strings[arr].add(value);
     }
 
+    public void putString(String value) {
+        putString(true,value);
+    }
 
     public boolean endOfStream(){
         return stringsPos[0]==strings[0].size() &&

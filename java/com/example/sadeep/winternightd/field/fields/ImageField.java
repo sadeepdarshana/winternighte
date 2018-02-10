@@ -43,6 +43,8 @@ public class ImageField extends IndentedField {
 
         image = new ImageView(getContext());
         addView(image);
+        image.setPadding(0,Globals.dp2px*2,0,Globals.dp2px*2);
+        image.setBackgroundColor(0xff888888);
 
 
 
@@ -58,7 +60,7 @@ public class ImageField extends IndentedField {
         image.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         image.setScaleType(ImageView.ScaleType.MATRIX);
         image.setAdjustViewBounds(true);
-        image.setPadding(Globals.dp2px*10,0,Globals.dp2px*10,0);
+        //image.setPadding(Globals.dp2px*10,0,Globals.dp2px*10,0);
 
 
     }

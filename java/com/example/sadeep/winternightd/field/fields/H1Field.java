@@ -8,7 +8,6 @@ import android.widget.TextView;
 import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.field.FieldFactory;
 import com.example.sadeep.winternightd.misc.Globals;
-import com.example.sadeep.winternightd.textboxes.EditTextView;
 import com.example.sadeep.winternightd.textboxes.XEditText;
 
 /**
@@ -45,7 +44,7 @@ public class H1Field extends SimpleIndentedField {
         CharSequence textTransferred = textView.getText().subSequence(textView.getSelectionStart(),textView.length());
         CharSequence textRemains = textView.getText().subSequence(0,textView.getSelectionStart()-1);
 
-        SimpleIndentedField newfield = (SimpleIndentedField) FieldFactory.createNewField(getContext(), SimpleIndentedField.classFieldType,true);
+        SimpleIndentedField newfield = (SimpleIndentedField) FieldFactory.createNewField(getContext(), SimpleIndentedField.classFieldType,true, null);
         getNote().addView(newfield,getFieldIndex()+1);
 
 
@@ -60,5 +59,10 @@ public class H1Field extends SimpleIndentedField {
         newfield.setIndent(this.getIndent());
 
         return true;
+    }
+    @Override
+    public void onBackspaceKeyPressedAtStart(XEditText xEditText)
+    {
+        revertToSimpleIndentedField();
     }
 }

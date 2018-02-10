@@ -6,24 +6,18 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.text.Spannable;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.example.sadeep.winternightd.R;
-import com.example.sadeep.winternightd.animation.XAnimation;
 import com.example.sadeep.winternightd.animation.XAnimationListener;
 import com.example.sadeep.winternightd.attachbox.AttachBoxManager;
 import com.example.sadeep.winternightd.attachbox.OnAttachBoxItemClick;
 import com.example.sadeep.winternightd.buttons.customizedbuttons.AttachBoxOpener;
 import com.example.sadeep.winternightd.clipboard.XClipboard;
-import com.example.sadeep.winternightd.dumping.RawFieldDataStream;
 import com.example.sadeep.winternightd.field.FieldFactory;
-import com.example.sadeep.winternightd.field.fields.Field;
 import com.example.sadeep.winternightd.field.fields.H1Field;
 import com.example.sadeep.winternightd.field.fields.SimpleIndentedField;
 import com.example.sadeep.winternightd.localstorage.DataConnection;
@@ -35,19 +29,12 @@ import com.example.sadeep.winternightd.notebook.Notebook;
 import com.example.sadeep.winternightd.bottombar.BottomBar;
 import com.example.sadeep.winternightd.selection.XSelection;
 import com.example.sadeep.winternightd.misc.NoteContainingActivityRootView;
-import com.example.sadeep.winternightd.spans.LiveFormattingStatus;
-import com.example.sadeep.winternightd.spans.SpansController;
-import com.example.sadeep.winternightd.temp.d;
-import com.example.sadeep.winternightd.toolbar.ToolbarController;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 
 public class NotebookActivity extends NoteContainingActivity {
@@ -154,14 +141,14 @@ public class NotebookActivity extends NoteContainingActivity {
                 SimpleIndentedField oldField = (SimpleIndentedField)note.getFieldAt(0);
                 CharSequence seq = oldField.getMainTextBox().getText();
 
-                H1Field newField = (H1Field)FieldFactory.createNewField(getContext(),H1Field.classFieldType,true);
+                H1Field newField = (H1Field)FieldFactory.createNewField(getContext(),H1Field.classFieldType,true, null);
                 newField.getMainTextBox().setText(seq);
 
                 note.removeView(oldField);
                 note.addView(newField);
 
                 SimpleIndentedField belowField = (SimpleIndentedField)
-                        FieldFactory.createNewField(getContext(),SimpleIndentedField.classFieldType,true);
+                        FieldFactory.createNewField(getContext(),SimpleIndentedField.classFieldType,true, null);
                 note.addView(belowField,1);
                 belowField.getMainTextBox().requestFocus();
 

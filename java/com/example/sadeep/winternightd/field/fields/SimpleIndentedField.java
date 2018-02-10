@@ -18,7 +18,6 @@ import com.example.sadeep.winternightd.field.SingleText;
 import com.example.sadeep.winternightd.misc.Globals;
 import com.example.sadeep.winternightd.misc.Utils;
 import com.example.sadeep.winternightd.misc.NoteContainingActivityRootView;
-import com.example.sadeep.winternightd.notebook.Notebook;
 import com.example.sadeep.winternightd.textboxes.EditTextView;
 import com.example.sadeep.winternightd.textboxes.XEditText;
 import com.example.sadeep.winternightd.spans.RichText;
@@ -131,7 +130,7 @@ public class SimpleIndentedField extends IndentedField implements SingleText {
         CharSequence textTransferred = textView.getText().subSequence(textView.getSelectionStart(),textView.length());
         CharSequence textRemains = textView.getText().subSequence(0,textView.getSelectionStart()-1);
 
-        SimpleIndentedField newfield = (SimpleIndentedField) FieldFactory.createNewField(getContext(), getFieldType(),true);
+        SimpleIndentedField newfield = (SimpleIndentedField) FieldFactory.createNewField(getContext(), getFieldType(),true, null);
         getNote().addView(newfield,getFieldIndex()+1);
 
 
@@ -162,7 +161,7 @@ public class SimpleIndentedField extends IndentedField implements SingleText {
 
         NoteContainingActivityRootView.pauseLayout();
 
-        final SimpleIndentedField newfield = (SimpleIndentedField) FieldFactory.createNewField(getContext(), SimpleIndentedField.classFieldType,true);
+        final SimpleIndentedField newfield = (SimpleIndentedField) FieldFactory.createNewField(getContext(), SimpleIndentedField.classFieldType,true, null);
         newfield.getMainTextBox().setText(this.getMainTextBox().getText());
 
         getNote().addView(newfield,getFieldIndex());

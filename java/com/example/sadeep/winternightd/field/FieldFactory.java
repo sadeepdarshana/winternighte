@@ -10,6 +10,8 @@ import com.example.sadeep.winternightd.field.fields.H1Field;
 import com.example.sadeep.winternightd.field.fields.ImageField;
 import com.example.sadeep.winternightd.field.fields.NumberedField;
 import com.example.sadeep.winternightd.field.fields.SimpleIndentedField;
+import com.example.sadeep.winternightd.field.fields.table.TableField;
+import com.example.sadeep.winternightd.field.fields.table.TableFieldParams;
 
 /**
  * Created by Sadeep on 10/18/2016.
@@ -23,7 +25,7 @@ final public class FieldFactory {
     private FieldFactory() {} //cannot be instantiated
 
     //returns a new empty Field of the given fieldType
-    public static Field createNewField(Context context, int fieldType, boolean isEditable)    {
+    public static Field createNewField(Context context, int fieldType, boolean isEditable, Object fieldParams)    {
         Field newField = null;
 
         switch (fieldType)
@@ -46,6 +48,10 @@ final public class FieldFactory {
             case H1Field.classFieldType:
                 newField = new H1Field(isEditable,context);
                 break;
+            case TableField.classFieldType:
+                if(fieldParams==null)newField = new TableField(context);
+                else newField= new TableField(context,(TableFieldParams) fieldParams);
+                break;
         }
 
         return newField;
@@ -53,7 +59,7 @@ final public class FieldFactory {
 
     public static Field fromFieldDataStream(Context context, FieldDataStream stream, boolean isEditable){
 
-        Field f = createNewField(context, stream.getFieldType(),isEditable);
+        Field f = createNewField(context, stream.getFieldType(),isEditable,null );
         f.readFromFieldDataStream(stream);
 
         return f;
