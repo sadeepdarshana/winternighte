@@ -333,10 +333,8 @@ public class Note extends LinearLayout {
             CursorPosition cpos = getCurrentCursorPosition();
             int newFieldPos;
             if(cpos==null)newFieldPos = getFieldCount();
-            else {
-                newFieldPos = cpos.fieldIndex+1;
-                if(cpos.characterIndex==0)newFieldPos=cpos.fieldIndex;
-            }
+            else newFieldPos = cpos.fieldIndex + 1;
+
 
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             final View promptView = layoutInflater.inflate(R.layout.tablefield_insert, null);
