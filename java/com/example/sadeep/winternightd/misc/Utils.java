@@ -6,22 +6,31 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 
 import com.example.sadeep.winternightd.spans.RichText;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -196,5 +205,152 @@ public class Utils {
 
     public static String getNewUUID(){
         return java.util.UUID.randomUUID().toString().replaceAll("-","");
+    }
+
+    public static void downloadFile(String url,OnSuccessListener onSuccess,OnProgressListener onProgress){
+        new DownloadFileFromURL(url,onSuccess,onProgress).execute();
+    }
+    public static interface OnSuccessListener{
+        void onSuccess(byte[] data);
+    }
+    public static interface OnProgressListener{
+        void onProgress(int progress);
+    }
+
+    private static ArrayList<String> progressingDownloads = new ArrayList<>();
+    private static ArrayList<String> successDownloads = new ArrayList<>();
+    private static class DownloadFileFromURL extends AsyncTask<String, String, String> {
+        private OnSuccessListener onSuccess;
+        private OnProgressListener onProgress;
+        private String link = null;
+
+        public DownloadFileFromURL(String link,OnSuccessListener onSuccess,OnProgressListener onProgress) {
+            this.onProgress = onProgress;
+            this.onSuccess = onSuccess;
+            this.link = link;
+        }
+
+
+        /**
+         * Before starting background thread Show Progress Bar Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        /**
+         * Downloading file in background thread
+         * */
+        @Override
+        protected String doInBackground(String... f_url) {
+            try {
+
+                for ( int i = 0;  i < progressingDownloads.size(); i++){
+                    String tempName = progressingDownloads.get(i);
+                    if(tempName.equals(link)) return null;
+                }
+                for ( int i = 0;  i < successDownloads.size(); i++){
+                    String tempName = successDownloads.get(i);
+                    if(tempName.equals(link)) return null;
+                }
+
+                URL url = new URL(link);
+                URLConnection conection = url.openConnection();
+                conection.connect();
+
+                // this will be useful so that you can show a tipical 0-100%
+                // progress bar
+                int lenghtOfFile = conection.getContentLength();
+
+                // download the file
+                InputStream input = new BufferedInputStream(url.openStream(),
+                        8192);
+
+                // Output stream
+
+                byte data[] = new byte[102400];
+
+                byte[] fa = new byte[80000000];
+                int o=0;boolean end=false;
+                progressingDownloads.add(link);
+                while (true) {
+                    int len=input.read(data,0,8192);
+                    if(len==-1) break;
+                    for(int v=0;v<len;v++) {
+                        fa[o++] =  data[v];
+                    }
+                    if (onProgress != null) onProgress.onProgress(o / 1024);
+                    if(end)break;
+                }
+                byte [] kk = new byte[o];
+                for(int c=0;c<o;c++)kk[c]=fa[c];
+                input.close();
+
+                for ( int i = 0;  i < progressingDownloads.size(); i++){
+                    String tempName = progressingDownloads.get(i);
+                    if(tempName.equals(link)){
+                        progressingDownloads.remove(i);
+                    }
+                }
+                successDownloads.add(link);
+                if(onSuccess!=null)onSuccess.onSuccess(kk);
+
+            } catch (Exception e) {
+                Log.e("File Download Error: ", e.getMessage());
+                for ( int i = 0;  i < progressingDownloads.size(); i++){
+                    String tempName = progressingDownloads.get(i);
+                    if(tempName.equals(link)){
+                        progressingDownloads.remove(i);
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        @Override
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog after the file was downloaded
+
+        }
+
+    }
+
+
+    public static boolean writeToFile(byte[] data,String file){
+        try {
+            FileOutputStream fout = new FileOutputStream(file, false);
+            fout.write(data);
+            fout.close();
+            return true;
+        }catch (Exception e){return false;}
+    }
+    public static void createDir(String path){
+        try {
+            File createDir = new File(path + File.separator);
+            if (!createDir.exists()) createDir.mkdir();
+        }catch (Exception e){}
+    }
+    public static byte[] readFromFile(String filepath){
+        File file=new File(filepath);
+        int size = (int) file.length();
+        byte[] bytes = new byte[size];
+        try {
+            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
+            buf.read(bytes, 0, bytes.length);
+            buf.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return bytes;
+
     }
 }

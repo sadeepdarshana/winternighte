@@ -7,6 +7,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <ImageView
+        android:id="@+id/image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -16,6 +17,10 @@
         android:id="@+id/node_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:text="TextView" />
+        android:paddingLeft="12dp"
+        android:text="TextView"
+        android:textColor="@android:color/black" />
+
 </LinearLayout>

@@ -1,29 +1,34 @@
 package com.example.sadeep.winternightd.activities;
 
-import android.app.Dialog;
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.AsyncTask;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.HorizontalScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sadeep.winternightd.R;
+import com.example.sadeep.winternightd.document.XTreeNode;
+import com.example.sadeep.winternightd.misc.Globals;
+import com.example.sadeep.winternightd.misc.Utils;
+import com.example.sadeep.winternightd.misc.XColors;
 import com.unnamed.b.atv.model.TreeNode;
 import com.unnamed.b.atv.view.AndroidTreeView;
 
-import java.io.BufferedInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.StringWriter;
-import java.lang.reflect.Array;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.File;
 
 public class DocumentViewer extends AppCompatActivity {
 
@@ -33,160 +38,102 @@ public class DocumentViewer extends AppCompatActivity {
     public static final int progress_bar_type = 0;
 
     // File url to download
-    private static String file_url = "http://192.168.43.2/list.txt";
+    private static String directoryURL = "https://winterproductionserver.azurewebsites.net/list.txt";
+    public static String server = "https://winterproductionserver.azurewebsites.net/";
+
+
+
+    HorizontalScrollView hsv ;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_document_viewer);
 
-        TreeNode root = TreeNode.root();
-        TreeNode parent = new TreeNode(new IconTreeItem("parent")).setViewHolder(new MyHolder(this));
-        TreeNode child0 = new TreeNode(new IconTreeItem("ChildNode0")).setViewHolder(new MyHolder(this));
-        TreeNode child1 = new TreeNode(new IconTreeItem("ChildNode1")).setViewHolder(new MyHolder(this));
-        parent.addChildren(child0, child1);
-        root.addChild(parent);
-
-        AndroidTreeView ttv = new AndroidTreeView(this,root);
+        hsv = (HorizontalScrollView) findViewById(R.id.root);
 
 
-        setContentView(ttv.getView());
-
-        new DownloadFileFromURL().execute(file_url);
+        Globals.initialize(this);
 
 
-    }
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(XColors.actionbarColor));
 
-    /**
-     * Showing Dialog
-     * */
+        String path = Environment.getExternalStorageDirectory()+"/WhatsNoteDocs/ghjk/fghjk/ghj/cvbn/rtyui";
+        Utils.createDir(path);
+        String listpath = Environment.getExternalStorageDirectory()+"/WhatsNoteDocs/list";
 
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case progress_bar_type: // we set this to 0
-                pDialog = new ProgressDialog(this);
-                pDialog.setMessage("Downloading file. Please wait...");
-                pDialog.setIndeterminate(false);
-                pDialog.setMax(100);
-                pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-                pDialog.setCancelable(true);
-                pDialog.show();
-                return pDialog;
-            default:
-                return null;
-        }
-    }
+        try {
 
-    /**
-     * Background Async Task to download file
-     * */
-    class DownloadFileFromURL extends AsyncTask<String, String, String> {
+            TreeNode root = TreeNode.root();
+            XTreeNode xroot = new XTreeNode("Notes",0,this);
+            String s = new String(Utils.readFromFile(listpath));
+            s.replaceAll("\r", "");
+            if(s.length()>0) {
+                String h[] = s.split("\n");
+                for (String xx : h) xroot.addContent(xx);
+                root.addChild(xroot.build());
+                AndroidTreeView ttv = new AndroidTreeView(DocumentViewer.this, root);
 
-        /**
-         * Before starting background thread Show Progress Bar Dialog
-         * */
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            showDialog(progress_bar_type);
-        }
-
-        /**
-         * Downloading file in background thread
-         * */
-        @Override
-        protected String doInBackground(String... f_url) {
-            int count;
-            try {
-                URL url = new URL(f_url[0]);
-                URLConnection conection = url.openConnection();
-                conection.connect();
-
-                // this will be useful so that you can show a tipical 0-100%
-                // progress bar
-                int lenghtOfFile = conection.getContentLength();
-
-                // download the file
-                InputStream input = new BufferedInputStream(url.openStream(),
-                        8192);
-
-                // Output stream
-
-                byte data[] = new byte[1024];
-
-                long total = 0;
-
-                byte[] fa = new byte[lenghtOfFile];
-                int o=0;
-                while ((count = input.read(data)) != -1) {
-                    total += count;
-                    // publishing the progress....
-                    // After this onProgressUpdate will be called
-                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
-
-                    // writing data to file
-                    for(int c=0;c<count;c++)fa[o++]=data[c];
-                }
-
-                String s = new String(fa);
-                s.split("\n");
-                getSupportActionBar().setTitle(s);
-                input.close();
-
-            } catch (Exception e) {
-                Log.e("Error: ", e.getMessage());
+                hsv.removeAllViews();
+                hsv.addView(ttv.getView());
             }
 
-            return null;
-        }
+        }catch (Exception e){}
 
-        /**
-         * Updating progress bar
-         * */
-        protected void onProgressUpdate(String... progress) {
-            // setting progress percentage
-            pDialog.setProgress(Integer.parseInt(progress[0]));
-        }
+        Utils.downloadFile(directoryURL, data->{
 
-        /**
-         * After completing background task Dismiss the progress dialog
-         * **/
-        @Override
-        protected void onPostExecute(String file_url) {
-            // dismiss the dialog after the file was downloaded
-            dismissDialog(progress_bar_type);
+            runOnUiThread(() -> {
 
-        }
+                TreeNode root = TreeNode.root();
+                XTreeNode xroot = new XTreeNode("Notes",0,this);
+                hsv.postDelayed(()->Utils.writeToFile(data,listpath),2000);
+                String s = new String(data);
+                s.replaceAll("\r","");
+                String h[]=s.split("\n");
+                for(String xx:h)xroot.addContent(xx);
+                root.addChild(xroot.build());
+                AndroidTreeView ttv = new AndroidTreeView(DocumentViewer.this,root);
 
-    }
+                HorizontalScrollView.LayoutParams params = new HorizontalScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                hsv.removeAllViews();
+                hsv.addView(ttv.getView());
+                Toast.makeText(DocumentViewer.this, "Refreshed notes list",
+                        Toast.LENGTH_SHORT).show();
+
+            });
 
 
+        },null);
 
-    class MyHolder extends TreeNode.BaseNodeViewHolder<IconTreeItem> {
 
-        public MyHolder(Context context) {
-            super(context);
-        }
-
-        @Override
-        public View createNodeView(TreeNode node, IconTreeItem value) {
-            final LayoutInflater inflater = LayoutInflater.from(context);
-            final View view = inflater.inflate(R.layout.nodetree, null, false);
-            TextView tvValue = (TextView) view.findViewById(R.id.node_value);
-            tvValue.setText(value.text);
-
-            return view;
-        }
+        ActivityCompat.requestPermissions(DocumentViewer.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                1);
 
     }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
 
-    public static class IconTreeItem {
-        public int icon;
-        public String text;
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-        public IconTreeItem(String text) {
-            this.text = text;
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
         }
     }
-
 }
