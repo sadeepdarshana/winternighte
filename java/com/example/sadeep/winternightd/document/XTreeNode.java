@@ -124,24 +124,12 @@ public class XTreeNode {
                                 fout.write(data);
                                 fout.close();
 
-                                Intent target = new Intent(Intent.ACTION_VIEW);
-                                if(value.type==1)target.setDataAndType(Uri.fromFile(file), "application/pdf");
-                                if(value.type==2)target.setDataAndType(Uri.fromFile(file), "application/pdf");
-                                if(value.type==3)target.setDataAndType(Uri.fromFile(file), "application/pdf");
-                                target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                 ((Activity)context).runOnUiThread(()->
                                 {
                                     tvValue.setText(qq[0]);
                                     tvValue.setTextColor(0xff117711);
-
                                 });
-                                Intent intent = Intent.createChooser(target, "Open File");
-                                try {
-                                    context.startActivity(intent);
-                                } catch (ActivityNotFoundException e) {
-                                    // Instruct the user to install a PDF reader here, or something
-                                }
-
+                                Utils.openFile(context,file);
                             } catch (java.io.IOException e) {
                                 e.printStackTrace();
                             }
@@ -152,17 +140,7 @@ public class XTreeNode {
                         });
                     }else{
 
-
-                        Intent target = new Intent(Intent.ACTION_VIEW);
-                        target.setDataAndType(Uri.fromFile(file), "application/pdf");
-                        target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-
-                        Intent intent = Intent.createChooser(target, "Open File");
-                        try {
-                            context.startActivity(intent);
-                        } catch (ActivityNotFoundException e) {
-                            // Instruct the user to install a PDF reader here, or something
-                        }
+                        Utils.openFile(context,file);
                     }
                 });
             }

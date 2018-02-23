@@ -305,6 +305,7 @@ public class NotebookActivity extends NoteContainingActivity {
                                 dialog.cancel();
                             }
                             else {
+                                Utils.createDir(Environment.getExternalStorageDirectory()+"/WhatsNoteDocs");
                                 Utils.createDir(pathAuth);
 
                                 Intent intent = new Intent(NotebookActivity.this, DocumentViewer.class);

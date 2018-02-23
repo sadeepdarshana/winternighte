@@ -33,10 +33,6 @@ import java.io.File;
 public class DocumentViewer extends AppCompatActivity {
 
 
-    // Progress Dialog
-    private ProgressDialog pDialog;
-    public static final int progress_bar_type = 0;
-
     // File url to download
     private static String directoryURL = "https://winterproductionserver.azurewebsites.net/list.txt";
     public static String server = "https://winterproductionserver.azurewebsites.net/";
@@ -51,22 +47,29 @@ public class DocumentViewer extends AppCompatActivity {
         setContentView(R.layout.activity_document_viewer);
 
         hsv = (HorizontalScrollView) findViewById(R.id.root);
-
-
+        TextView tvv= new TextView(this);
+        tvv.setText("Please wait while the list of notes is loaded");
         Globals.initialize(this);
 
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(XColors.actionbarColor));
-
-        String path = Environment.getExternalStorageDirectory()+"/WhatsNoteDocs/ghjk/fghjk/ghj/cvbn/rtyui";
-        Utils.createDir(path);
         String listpath = Environment.getExternalStorageDirectory()+"/WhatsNoteDocs/list";
 
+        if(!new File(listpath).exists()){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Wish you all the best for the coming exams, there already are some great materials here. We'll be updating more soon!!!")
+                    .setCancelable(false)
+                    .setPositiveButton("OK", (dialog, id) -> {});
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+
+        String s="";
         try {
 
             TreeNode root = TreeNode.root();
             XTreeNode xroot = new XTreeNode("Notes",0,this);
-            String s = new String(Utils.readFromFile(listpath));
+            s = new String(Utils.readFromFile(listpath));
             s.replaceAll("\r", "");
             if(s.length()>0) {
                 String h[] = s.split("\n");
@@ -80,6 +83,7 @@ public class DocumentViewer extends AppCompatActivity {
 
         }catch (Exception e){}
 
+        String finalS1 = s;
         Utils.downloadFile(directoryURL, data->{
 
             runOnUiThread(() -> {
@@ -87,9 +91,10 @@ public class DocumentViewer extends AppCompatActivity {
                 TreeNode root = TreeNode.root();
                 XTreeNode xroot = new XTreeNode("Notes",0,this);
                 hsv.postDelayed(()->Utils.writeToFile(data,listpath),2000);
-                String s = new String(data);
-                s.replaceAll("\r","");
-                String h[]=s.split("\n");
+                String ss = new String(data);
+                if(ss.equals(finalS1))return;
+                ss.replaceAll("\r","");
+                String h[]=ss.split("\n");
                 for(String xx:h)xroot.addContent(xx);
                 root.addChild(xroot.build());
                 AndroidTreeView ttv = new AndroidTreeView(DocumentViewer.this,root);
