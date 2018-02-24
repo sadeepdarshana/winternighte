@@ -57,13 +57,20 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DocumentViewer"
-
+        <activity
+            android:name=".activities.DocumentViewer"
             android:theme="@style/notebook_activity_theme">
-
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.whatsnoted.beta.MainActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/notebook_activity_theme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
