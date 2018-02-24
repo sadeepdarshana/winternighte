@@ -1,6 +1,5 @@
-package com.whatsnoted.beta;
+package com.example.sadeep.winternightd.activities;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,8 +11,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.sadeep.winternightd.R;
-import com.example.sadeep.winternightd.activities.DocumentViewer;
-import com.example.sadeep.winternightd.activities.NotebookActivity;
 import com.example.sadeep.winternightd.misc.Utils;
 
 import java.io.File;
