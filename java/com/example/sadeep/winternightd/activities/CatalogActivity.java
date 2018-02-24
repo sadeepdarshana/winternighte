@@ -180,31 +180,20 @@ public class CatalogActivity extends AppCompatActivity {
         dialog.show();
         if(delButton)dialog.findViewById(R.id.delete).setVisibility(View.VISIBLE);
 
-        dialog.findViewById(R.id.add).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText text = (EditText)dialog.findViewById(R.id.notebook_name);
-                if(text.length()==0)return;
-                info.title=text.getText().toString();
-                CatalogDataHandler.addNotebook(info);
-                catalog.refresh();
-                dialog.dismiss();
-            }
+        dialog.findViewById(R.id.add).setOnClickListener(v -> {
+            EditText text = (EditText)dialog.findViewById(R.id.notebook_name);
+            if(text.length()==0)return;
+            info.title=text.getText().toString();
+            CatalogDataHandler.addNotebook(info);
+            catalog.refresh();
+            dialog.dismiss();
         });
-        dialog.findViewById(R.id.delete).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CatalogDataHandler.deleteNotebook(info.notebookUUID);
-                dialog.dismiss();
-                catalog.refresh();
-            }
+        dialog.findViewById(R.id.delete).setOnClickListener(v -> {
+            CatalogDataHandler.deleteNotebook(info.notebookUUID);
+            dialog.dismiss();
+            catalog.refresh();
         });
-        dialog.findViewById(R.id.cancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
+        dialog.findViewById(R.id.cancel).setOnClickListener(v -> dialog.dismiss());
 
     }
 }
