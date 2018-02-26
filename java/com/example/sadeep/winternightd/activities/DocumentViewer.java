@@ -34,7 +34,7 @@ public class DocumentViewer extends AppCompatActivity {
 
 
     // File url to download
-    private static String directoryURL = "https://winterproductionserver.azurewebsites.net/list.txt";
+    private static String directoryURL = "https://winterproductionserver.azurewebsites.net/listv2.txt";
     public static String server = "https://winterproductionserver.azurewebsites.net/";
 
 

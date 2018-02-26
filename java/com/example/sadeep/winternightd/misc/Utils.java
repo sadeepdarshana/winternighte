@@ -31,8 +31,6 @@ import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -209,8 +207,11 @@ public class Utils {
         return java.util.UUID.randomUUID().toString().replaceAll("-","");
     }
 
+    public static void downloadFile(String url,OnSuccessListener onSuccess,OnProgressListener onProgress,int bytes){
+        new DownloadFileFromURL(url,onSuccess,onProgress,bytes).execute();
+    }
     public static void downloadFile(String url,OnSuccessListener onSuccess,OnProgressListener onProgress){
-        new DownloadFileFromURL(url,onSuccess,onProgress).execute();
+        new DownloadFileFromURL(url,onSuccess,onProgress,1000000).execute();
     }
     public static interface OnSuccessListener{
         void onSuccess(byte[] data);
@@ -225,11 +226,13 @@ public class Utils {
         private OnSuccessListener onSuccess;
         private OnProgressListener onProgress;
         private String link = null;
+        private int fileSize;
 
-        public DownloadFileFromURL(String link,OnSuccessListener onSuccess,OnProgressListener onProgress) {
+        public DownloadFileFromURL(String link, OnSuccessListener onSuccess, OnProgressListener onProgress, int fileSize) {
             this.onProgress = onProgress;
             this.onSuccess = onSuccess;
             this.link = link;
+            this.fileSize = fileSize;
         }
 
 
@@ -271,10 +274,10 @@ public class Utils {
 
                 // Output stream
 
-                byte data[] = new byte[102400];
+                byte data[] = new byte[8192+10];
 
-                byte[] fa = new byte[80000000];
-                int o=0;boolean end=false;
+                byte[] fa = new byte[fileSize+10];
+                int o=0;
                 progressingDownloads.add(link);
                 while (true) {
                     int len=input.read(data,0,8192);
@@ -283,7 +286,6 @@ public class Utils {
                         fa[o++] =  data[v];
                     }
                     if (onProgress != null) onProgress.onProgress(o / 1024);
-                    if(end)break;
                 }
                 byte [] kk = new byte[o];
                 for(int c=0;c<o;c++)kk[c]=fa[c];

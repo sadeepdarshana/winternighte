@@ -137,7 +137,7 @@ public class XTreeNode {
                             ((Activity)context).runOnUiThread(() -> {
                                 tvValue.setText(qq[0]+"  "+(val<1000?(val+"KB"):(val/1000.0f+"MB")));
                             });
-                        });
+                        },Integer.parseInt(qq[2]));
                     }else{
 
                         Utils.openFile(context,file);
